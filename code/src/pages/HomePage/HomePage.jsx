@@ -57,26 +57,29 @@ const HomePage  = () => {
          <div className='body' style={{ width:'100%',backgroundColor:'#e7dee2'}}>
             <div id="container" style={{ height:'1000px',width:'100%',margin:'0 auto' }}>
        <SliderComponent arrImages={[Baner1,Baner2,Baner3]}/>
-       <WrapperProducts>
+       <div style={{ marginLeft: "120px", marginRight: "120px", display: "flex", justifyContent: "center" }}>
+    <WrapperProducts style={{ display: "flex", gap: "20px", flexWrap: "wrap", justifyContent: "space-between", width: "100%" }}>
         {products?.data?.map((product) => {
-            return(
-                <CardComponent 
-                key={product._id}
-                countInStock={product.countInStock}
-                description={product.description}
-                image={product.image}
-                name={product.name}
-                price={product.price}
-                rating={product.rating}
-                type={product.type}
-                selled={product.selled}
-                discount={product.discount}
-                id={product._id}
+            return (
+                <CardComponent
+                    key={product._id}
+                    countInStock={product.countInStock}
+                    description={product.description}
+                    image={product.image}
+                    name={product.name}
+                    price={product.price}
+                    rating={product.rating}
+                    type={product.type}
+                    selled={product.selled}
+                    discount={product.discount}
+                    id={product._id}
                 />
-            )
+            );
         })}
-       </WrapperProducts>
-       <div style={{width:'20%',display:'flex',justifyContent:'center',margin:'0 auto'}}>
+    </WrapperProducts>
+</div>
+
+       <div style={{width:'20%',display:'flex',justifyContent:'center',margin:'0 auto', paddingTop:"40px"}}>
         <WrapperButtonMore 
             textButton ="Xem Thêm" type="outline" styleButton= {{
             border: '1px solid rgb(11,116,229)',

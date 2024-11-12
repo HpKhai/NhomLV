@@ -3,10 +3,11 @@ import styled from "styled-components";
 
 export const WrapperStyleNameProduct = styled.h1`
 color: rgb(36 , 36, 36);
-font-size: 24px;
-font-weight: 300;
+font-size: 34px;
+font-weight: 800;
 line-height: 32px;
 work-break: break-word;
+
 `
 export const WrapperStyleText = styled.span`
 font-size: 15px;
@@ -16,6 +17,7 @@ color: rgb(120 , 120, 120);
 export const WrapperPriceProduct = styled.div`
 background: rgb(250,250,250);
 border-radius: 4px;
+color: red;
 `
 export const WrapperPriceTextProduct = styled.h1`
 font-weight: 500;

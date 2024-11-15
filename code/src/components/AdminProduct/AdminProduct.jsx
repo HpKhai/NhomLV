@@ -33,34 +33,21 @@ const AdminProduct = () => {
         rating: '',
         discount: '',
         description: '',
-        image: ''
+        origin: '',
+        uses: '',
+        report: '',
+        preserve: '',
+        image: '',
     })
     const [stateProduct, setStateProduct] = useState(inittial())
     const [stateProductDetails, setStateProductDetails] = useState(inittial())
 
-    const mutation = useMutationHooks(
-        (data) => {
-            const {
-                name,
-                price,
-                type,
-                countInStock,
-                rating,
-                description,
-                image
-            } = data
-            const res = ProductService.createProduct({
-                name,
-                price,
-                type,
-                countInStock,
-                rating,
-                description,
-                image
-            })
-            return res
-        }
-    )
+    const mutation = useMutationHooks((data) => {
+        const res = ProductService.createProduct({
+            ...data,
+        })
+        return res
+    })
     const mutationUpdate = useMutationHooks(
         (data) => {
             const {
@@ -120,6 +107,7 @@ const AdminProduct = () => {
 
     const fetchGetDetailsProduct = async (rowSelected) => {
         const res = await ProductService.getDetailsProduct(rowSelected)
+        console.log('res', res.data)
         if (res?.data) {
             setStateProductDetails({
                 name: res?.data?.name,
@@ -129,7 +117,11 @@ const AdminProduct = () => {
                 rating: res?.data?.rating,
                 description: res?.data?.description,
                 image: res?.data?.image,
-                discount: res?.data?.discount
+                discount: res?.data?.discount,
+                uses: res?.data?.uses,
+                report: res?.data?.report,
+                preserve: res?.data?.preserve,
+                origin: res?.data?.origin,
             })
         }
     }
@@ -236,21 +228,7 @@ const AdminProduct = () => {
             if (visible) {
                 setTimeout(() => searchInput.current?.select(), 100);
             }
-        },
-        // render: (text) =>
-        //   searchedColumn === dataIndex ? (
-        //     // <Highlighter
-        //     //   highlightStyle={{
-        //     //     backgroundColor: '#ffc069',
-        //     //     padding: 0,
-        //     //   }}
-        //     //   searchWords={[searchText]}
-        //     //   autoEscape
-        //     //   textToHighlight={text ? text.toString() : ''}
-        //     // />
-        //   ) : (
-        //     text
-        //   ),
+        }
     })
 
 
@@ -322,6 +300,7 @@ const AdminProduct = () => {
         return { ...product, key: product._id }
     })
     const { data, isSuccess, isError } = mutation
+    console.log('s', data)
     const { data: dataUpdate, isSuccess: isSuccessUpdate, isError: isErrorUpdate } = mutationUpdate
     const { data: dataDelete, isSuccess: isSuccessDelete, isError: isErrorDelete } = mutationDelete
     const { data: dataDeleteMany, isSuccess: isSuccessDeleteMany, isError: isErrorDeleteMany } = mutationDeleteMany
@@ -366,14 +345,14 @@ const AdminProduct = () => {
         } else if (isError) {
             Message.error()
         }
-    }, [isSuccess])
+    }, [isSuccess, isError])
     useEffect(() => {
         if (isSuccessUpdate && dataUpdate?.status === 'OK') {
             Message.success()
         } else if (isErrorUpdate) {
             Message.error()
         }
-    }, [isSuccessUpdate])
+    }, [isSuccessUpdate, isErrorUpdate])
     useEffect(() => {
         if (isSuccessDelete && dataDelete?.status === 'OK') {
             handleCancelDelete()
@@ -399,7 +378,12 @@ const AdminProduct = () => {
             rating: stateProduct?.rating,
             description: stateProduct?.description,
             image: stateProduct?.image,
-            discount: stateProduct?.discount
+            discount: stateProduct?.discount,
+            origin: stateProduct?.origin,
+            uses: stateProduct?.uses,
+            report: stateProduct?.report,
+            preserve: stateProduct?.preserve,
+
         }
         mutation.mutate(params, {
             onSettled: () => {
@@ -554,6 +538,38 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
+                        label="Xuất xứ"
+                        name="origin"
+                        rules={[{ required: true, message: 'Please input origin of product!' }]}
+                    >
+                        <InputComponents value={stateProduct.origin} onChange={handleOnChange} name="origin" />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Công dụng"
+                        name="uses"
+                        rules={[{ required: true, message: 'Please input uses of product!' }]}
+                    >
+                        <InputComponents value={stateProduct.uses} onChange={handleOnChange} name="uses" />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Cảnh báo an toàn"
+                        name="report"
+                        rules={[{ required: true, message: 'Please input report product!' }]}
+                    >
+                        <InputComponents value={stateProduct.report} onChange={handleOnChange} name="report" />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Bảo quản"
+                        name="preserve"
+                        rules={[{ required: true, message: 'Please input preserve!' }]}
+                    >
+                        <InputComponents value={stateProduct.preserve} onChange={handleOnChange} name="preserve" />
+                    </Form.Item>
+
+                    <Form.Item
                         label="Image"
                         name="image"
                         rules={[{ required: true, message: 'Please input image product!' }]}
@@ -643,6 +659,38 @@ const AdminProduct = () => {
                         rules={[{ required: true, message: 'Please input description product!' }]}
                     >
                         <InputComponents value={stateProductDetails.description} onChange={handleOnChangeDetails} name="description" />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Xuất xứ"
+                        name="origin"
+                        rules={[{ required: true, message: 'Please input origin of product!' }]}
+                    >
+                        <InputComponents value={stateProductDetails.origin} onChange={handleOnChange} name="origin" />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Công dụng"
+                        name="uses"
+                        rules={[{ required: true, message: 'Please input uses of product!' }]}
+                    >
+                        <InputComponents value={stateProductDetails.uses} onChange={handleOnChange} name="uses" />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Cảnh báo an toàn"
+                        name="report"
+                        rules={[{ required: true, message: 'Please input report product!' }]}
+                    >
+                        <InputComponents value={stateProductDetails.report} onChange={handleOnChange} name="report" />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Bảo quản"
+                        name="preserve"
+                        rules={[{ required: true, message: 'Please input preserve!' }]}
+                    >
+                        <InputComponents value={stateProductDetails.preserve} onChange={handleOnChange} name="preserve" />
                     </Form.Item>
 
                     <Form.Item

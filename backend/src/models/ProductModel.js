@@ -10,6 +10,10 @@ const productSchema = new mongoose.Schema(
         description: { type: String },
         discount: { type: Number },
         selled: { type: Number },
+        uses: { type: String },
+        origin: { type: String },
+        report: { type: String },
+        preserve: { type: String },
 
 
     },

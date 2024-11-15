@@ -9,6 +9,10 @@ width :200px;
     height: 200px;
     width: 200px;
 }
+position: relative;
+background-color: ${props => props.disabled ? '#ccc' : '#fff'};
+cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+
 `
 
 export const StyleNameProduct = styled.div`

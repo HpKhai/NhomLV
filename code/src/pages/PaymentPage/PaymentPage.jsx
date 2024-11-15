@@ -46,9 +46,8 @@ const PaymentPage = () => {
                 phone: user?.phone,
                 city: user?.city
             })
-
         }
-    }, [isModalUpdateInfo])
+    }, [isModalUpdateInfo, stateUserDetails, user])
 
     const priceMemo = useMemo(() => {
         const result = order?.orderItemsSelected?.reduce((total, cur) => {
@@ -67,17 +66,18 @@ const PaymentPage = () => {
         }
     }, [order])
     const deliveryPrice = useMemo(() => {
-        if (priceMemo > 2000000) {
-            return 0
-        } else if (priceMemo === 0) {
+        if (priceMemo >= 200000 && priceMemo < 500000) {
+            return 10000
+        } else if (priceMemo >= 500000 || order?.orderItemsSelected.length === 0) {
             return 0
         } else {
             return 20000
         }
-    }, [priceMemo])
+    }, [priceMemo, order])
     const totalPriceMemo = useMemo(() => {
-        return (Number(priceMemo) - Number(discountMemo))
-    }, [priceMemo, discountMemo])
+        return (Number(priceMemo) - Number(discountMemo) + Number(deliveryPrice))
+
+    }, [priceMemo, discountMemo, deliveryPrice])
 
 
 

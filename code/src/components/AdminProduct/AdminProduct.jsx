@@ -25,26 +25,18 @@ const AdminProduct = () => {
     // const [searchText, setSearchText] = useState('');
     // const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef(null);
-    const [stateProduct, setStateProduct] = useState({
+    const inittial = () => ({
         name: '',
         price: '',
         type: '',
         countInStock: '',
         rating: '',
-        discount:'',
+        discount: '',
         description: '',
         image: ''
     })
-    const [stateProductDetails, setStateProductDetails] = useState({
-        name: '',
-        price: '',
-        type: '',
-        countInStock: '',
-        rating: '',
-        discount:'',
-        description: '',
-        image: ''
-    })
+    const [stateProduct, setStateProduct] = useState(inittial())
+    const [stateProductDetails, setStateProductDetails] = useState(inittial())
 
     const mutation = useMutationHooks(
         (data) => {
@@ -98,7 +90,7 @@ const AdminProduct = () => {
     const mutationDeleteMany = useMutationHooks(
         (data) => {
             const {
-                token, 
+                token,
                 ...ids
             } = data
             const res = ProductService.deleteManyProduct(
@@ -141,12 +133,15 @@ const AdminProduct = () => {
             })
         }
     }
-    
 
 
     useEffect(() => {
-        form.setFieldsValue(stateProductDetails)
-    }, [form, stateProductDetails])
+        if (!isModalOpen) {
+            form.setFieldsValue(stateProductDetails)
+        } else {
+            form.setFieldsValue(inittial())
+        }
+    }, [form, stateProductDetails, isModalOpen])
 
     useEffect(() => {
         if (rowSelected) {
@@ -154,7 +149,7 @@ const AdminProduct = () => {
         }
     }, [rowSelected])
 
-    
+
 
     const handleDetailsProduct = () => {
         setIsOpenDrawer(true)
@@ -343,7 +338,7 @@ const AdminProduct = () => {
             }
         })
     }
-    const handleDeleteManyProducts = (ids) =>{
+    const handleDeleteManyProducts = (ids) => {
         mutationDeleteMany.mutate({ ids: ids, token: user?.access_token }, {
             onSettled: () => {
                 queryProduct.refetch()
@@ -360,7 +355,7 @@ const AdminProduct = () => {
             rating: '',
             description: '',
             image: '',
-            discount:'',
+            discount: '',
         })
         form.resetFields()
     }
@@ -458,13 +453,13 @@ const AdminProduct = () => {
         })
         setIsOpenDrawer(false)
     }
-    const handleChangeSelect = (value) =>{
-        if(value !== 'add_type'){
+    const handleChangeSelect = (value) => {
+        if (value !== 'add_type') {
             setStateProduct({
                 ...stateProduct,
                 type: value
             })
-        }else{
+        } else {
             setTypeSelect(value)
         }
     }

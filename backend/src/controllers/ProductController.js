@@ -1,4 +1,4 @@
-const cookieParser =require ('cookie-parser')
+const cookieParser = require('cookie-parser')
 
 const ProductService = require('../services/ProductService');
 
@@ -6,33 +6,33 @@ const ProductService = require('../services/ProductService');
 const createProduct = async (req, res) => {
     try {
         console.log('req.body', req.body)
-        const { name, image, type, price ,countInStock, rating, description, discount } = req.body
+        const { name, image, type, price, countInStock, rating, description, discount } = req.body
         if (!name) {
             return res.status(400).json({
                 status: 'ERR',
                 message: 'The input name is required'
             })
-        }else if (!image ) {
+        } else if (!image) {
             return res.status(400).json({
                 status: 'ERR',
                 message: 'The input image is required'
             })
-        }else if (!type) {
+        } else if (!type) {
             return res.status(400).json({
                 status: 'ERR',
                 message: 'The input type is required'
             })
-        } else if ( !price ) {
+        } else if (!price) {
             return res.status(400).json({
                 status: 'ERR',
                 message: 'The input price is required'
             })
-        }else if (!countInStock) {
+        } else if (!countInStock) {
             return res.status(400).json({
                 status: 'ERR',
                 message: 'The input cit is required'
             })
-        }else if (!rating) {
+        } else if (!rating) {
             return res.status(400).json({
                 status: 'ERR',
                 message: 'The input rating is required'
@@ -52,7 +52,7 @@ const updateProduct = async (req, res) => {
     try {
         const ProductId = req.params.id
         const data = req.body
-        if(!ProductId){
+        if (!ProductId) {
             return res.status(400).json({
                 status: 'ERR',
                 message: 'The ProductId is required'
@@ -88,13 +88,13 @@ const getDetailsProduct = async (req, res) => {
             message: 'Đã xảy ra lỗi hệ thống, vui lòng thử lại sau'
         });
     }
-};
+}
 
 
 const deleteProduct = async (req, res) => {
     try {
         const productId = req.params.id
-        if(!productId){
+        if (!productId) {
             return res.status(400).json({
                 status: 'ERR',
                 message: 'The productId is required'
@@ -111,10 +111,10 @@ const deleteProduct = async (req, res) => {
 
 }
 const deleteManyProduct = async (req, res) => {
-    console.log('req',req.body)
+    console.log('req', req.body)
     try {
         const ids = req.body.ids
-        if(!ids){
+        if (!ids) {
             return res.status(400).json({
                 status: 'ERR',
                 message: 'The productId is required'
@@ -133,8 +133,8 @@ const deleteManyProduct = async (req, res) => {
 
 const getAllProduct = async (req, res) => {
     try {
-        const {limit, page, sort, filter } = req.query
-        const response = await ProductService.getAllProduct(Number(limit ) || 8, Number(page ) || 0, sort , filter)
+        const { limit, page, sort, filter } = req.query
+        const response = await ProductService.getAllProduct(Number(limit) || 8, Number(page) || 0, sort, filter)
         return res.status(201).json(response)
     } catch (e) {
         return res.status(500).json({

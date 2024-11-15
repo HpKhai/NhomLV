@@ -1,34 +1,34 @@
-const cookieParser =require ('cookie-parser')
+const cookieParser = require('cookie-parser')
 
 const Product = require("../models/ProductModel")
 const bcrypt = require("bcrypt")
 
 const createProduct = (newProduct) => {
     return new Promise(async (resolve, reject) => {
-        const { name, image, type, price ,countInStock, rating, description, discount } = newProduct
+        const { name, image, type, price, countInStock, rating, description, discount } = newProduct
         try {
             const checkProduct = await Product.findOne({
                 name: name
             })
-            if (checkProduct !== null){
-                resolve ({
+            if (checkProduct !== null) {
+                resolve({
                     status: 'ERR',
                     message: 'The name of product is already'
                 })
             }
-        
+
             const createdProduct = await Product.create({
-                name, image, type, price ,countInStock, rating, description, discount
+                name, image, type, price, countInStock, rating, description, discount
             })
-            if (createdProduct){
-              resolve ({
-                status : 'OK',
-                message: 'SUCCESS',
-                data: createdProduct
-              })  
+            if (createdProduct) {
+                resolve({
+                    status: 'OK',
+                    message: 'SUCCESS',
+                    data: createdProduct
+                })
             }
-            
-        }catch (e){
+
+        } catch (e) {
             reject(e)
         }
     })
@@ -49,7 +49,7 @@ const updateProduct = (id, data) => {
                 status: 'OK',
                 message: 'SUCCESS',
                 data: updatedProduct
-            });  
+            });
         } catch (e) {
             reject(e);
         }
@@ -63,20 +63,20 @@ const deleteProduct = (id) => {
             const checkProduct = await Product.findOne({
                 _id: id
             })
-            if (checkProduct === null){
-                resolve ({
+            if (checkProduct === null) {
+                resolve({
                     status: 'OK',
                     message: 'The product is not defined'
                 })
             }
             await Product.findByIdAndDelete(id)
-            resolve ({
-                status : 'OK',
+            resolve({
+                status: 'OK',
                 message: 'Delete product SUCCESS',
-               
-              })  
-            
-        }catch (e){
+
+            })
+
+        } catch (e) {
             reject(e)
         }
     })
@@ -84,14 +84,14 @@ const deleteProduct = (id) => {
 const deleteManyProduct = (ids) => {
     return new Promise(async (resolve, reject) => {
         try {
-            await Product.deleteMany({_id: ids})
-            resolve ({
-                status : 'OK',
+            await Product.deleteMany({ _id: ids })
+            resolve({
+                status: 'OK',
                 message: 'Delete product SUCCESS',
-               
-              })  
-            
-        }catch (e){
+
+            })
+
+        } catch (e) {
             reject(e)
         }
     })
@@ -103,43 +103,43 @@ const getDetailsProduct = (id) => {
             const product = await Product.findOne({
                 _id: id
             })
-            if (product === null){
-                resolve ({
+            if (product === null) {
+                resolve({
                     status: 'ERR',
                     message: 'The product is not defined'
                 })
             }
-            resolve ({
-                status : 'OK',
+            resolve({
+                status: 'OK',
                 message: ' SUCCESS',
                 data: product
-              })  
-            
-        }catch (e){
+            })
+
+        } catch (e) {
             reject(e)
         }
     })
 }
 
-const getAllProduct = (limit, page , sort, filter  ) => {
+const getAllProduct = (limit, page, sort, filter) => {
     return new Promise(async (resolve, reject) => {
         try {
             const totalProduct = await Product.countDocuments()
-            if(filter){
+            if (filter) {
                 const label = filter[0];
-                const allObjectFilter = await Product.find({ [label]: {'$regex': filter[1]} }).limit(limit).skip(page * limit)
+                const allObjectFilter = await Product.find({ [label]: { '$regex': filter[1] } }).limit(limit).skip(page * limit)
                 resolve({
                     status: 'OK',
                     message: 'SUCCESS',
                     data: allObjectFilter,
                     total: totalProduct,
                     pageCurrent: Number(page + 1),   // Trang hiện tại, tính từ 1
-                    totalPage : Math.ceil(totalProduct / limit)
-                }); 
+                    totalPage: Math.ceil(totalProduct / limit)
+                });
             }
-            if(sort){
-                const objectSort ={}
-                objectSort[sort[1]] = sort [0]
+            if (sort) {
+                const objectSort = {}
+                objectSort[sort[1]] = sort[0]
                 const allProductSort = await Product.find().limit(limit).skip(page * limit).sort(objectSort)
                 resolve({
                     status: 'OK',
@@ -147,7 +147,7 @@ const getAllProduct = (limit, page , sort, filter  ) => {
                     data: allProductSort,
                     total: totalProduct,
                     pageCurrent: Number(page + 1),   // Trang hiện tại, tính từ 1
-                    totalPage : Math.ceil(totalProduct / limit)
+                    totalPage: Math.ceil(totalProduct / limit)
                 });
             }
             const allProduct = await Product.find().limit(limit).skip(page * limit)
@@ -157,16 +157,16 @@ const getAllProduct = (limit, page , sort, filter  ) => {
                 data: allProduct,
                 total: totalProduct,
                 pageCurrent: Number(page + 1),   // Trang hiện tại, tính từ 1
-                totalPage : Math.ceil(totalProduct / limit)
+                totalPage: Math.ceil(totalProduct / limit)
             });
-            
+
         } catch (e) {
             reject(e);
         }
     });
 }
 
-const getAllType = ( ) => {
+const getAllType = () => {
     return new Promise(async (resolve, reject) => {
         try {
             const allType = await Product.distinct('type')
@@ -175,7 +175,7 @@ const getAllType = ( ) => {
                 message: 'SUCCESS',
                 data: allType,
             })
-            
+
         } catch (e) {
             reject(e);
         }

@@ -50,7 +50,7 @@ export const WrapperPriceDiscount = styled.span`
 
 export const WrapperInfo = styled.div`
     margin-top: 20px;
-    padding: 10px;
+    padding: 50px;
     border-top: 1px solid #eee;
 `
 

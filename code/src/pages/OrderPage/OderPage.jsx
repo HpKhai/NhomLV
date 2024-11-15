@@ -270,7 +270,7 @@ const OrderPage = () => {
                                     <span style={{color:'#000', fontSize:'16px', fontWeight:'bold'}}>{convertPrice(totalPriceMemo)}</span>
                                 </div>
                         </div>
-                        <div style={{marginTop: '20px', display: 'flex', justifyContent: 'center'}}>
+                        <div style={{ display: 'flex', justifyContent: 'center'}}>
                             <ButtonComponent 
                             onClick={() => handleAddCart()}
                             size={40}

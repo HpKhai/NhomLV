@@ -5,8 +5,8 @@ import { WrapperSliderStyle } from './style';
 
 const SliderComponent = ({ arrImages }) => {
   var settings = {
-    dots: true,
-    infinite: true,
+    dots: false,
+    infinite: false,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -15,13 +15,14 @@ const SliderComponent = ({ arrImages }) => {
   };
   
   return (
-    <WrapperSliderStyle {...settings}>
+    <div style={{marginLeft:"120px", marginRight:"120px" , paddingTop:"20px" , marginBottom:"40px"}}>
+    <WrapperSliderStyle {...settings} >
       {arrImages.map((image) => {
         return (
           <Image key={image} src={image} alt="slider" preview={false} width="100%" height="160px"/>
         )
 })}
-    </WrapperSliderStyle>
+    </WrapperSliderStyle></div>
   )
 }
 

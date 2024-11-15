@@ -5,8 +5,8 @@ const OrderService = require('../services/OrderService')
 const createOrder = async (req, res) => {
 
     try {
-        const { paymentMethod, itemsPrice, shippingPrice, totalPrice, fullName, address, city, phone } = req.body
-        console.log('req', req.body)
+        const { paymentMethod, itemsPrice, shippingPrice, totalPrice, fullName,
+            address, city, phone, origin, uses, report, preserve } = req.body
         if (!paymentMethod || !itemsPrice || !shippingPrice || !totalPrice || !fullName || !address || !city || !phone) {
             return res.status(200).json({
                 status: 'ERR',

@@ -4,9 +4,9 @@ import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { resetUser } from '../../redux/slides/userSlide';
 import { searchProduct } from "../../redux/slides/productSlide";
-import { WrapperHeader, WrapperTextHeader, WrapperHeaderAccount, WrapperTextHeaderSmall, WrapperContentPopup } from "./Style";
+import { WrapperHeader, WrapperTextHeader, WrapperHeaderAccount, WrapperTextHeaderSmall, WrapperContentPopup, WrapperHeaderMap } from "./Style";
 import ButtonSearch from '../ButtonSearch/ButtonSearch';
-import { UserOutlined, CaretDownOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { UserOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { FaMapLocationDot } from "react-icons/fa6";
 import * as UserService from '../../service/UserService';
 
@@ -27,9 +27,9 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     const handleNavigateLogin = () => navigate('/sign-in');
     const handleNavigateHome = () => navigate('/');
     const handleNavigateMap = () => navigate('/map');
-    
+
     const handleLogout = async () => {
-        await UserService.logoutUser();
+        await UserService.logoutUser(user?.access_token);
         dispatch(resetUser());
     };
 
@@ -97,10 +97,12 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
                     </Col>
                 )}
                 <Col span={5} style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-                    <WrapperHeaderAccount>
+                    <WrapperHeaderMap>
                         <div onClick={handleNavigateMap}>
                             <FaMapLocationDot style={{ fontSize: "28px", marginRight: '20px' }} />
                         </div>
+                    </WrapperHeaderMap>
+                    <WrapperHeaderAccount>
                         {userAvatar ? (
                             <img src={userAvatar} alt="avatar" style={styles.avatar} />
                         ) : (

@@ -1,10 +1,9 @@
-import { Col, Row, Image, InputNumber } from "antd";
+import { Col, Row, Image } from "antd";
 import { Rate } from "antd";
 
 import React, { useState } from "react";
 // import imageProductSmall from '../../assets/images/2.webp'
 import {
-  WrapperAddressProduct,
   WrapperInputNumber,
   WrapperPriceProduct,
   WrapperPriceTextProduct,
@@ -52,6 +51,7 @@ const ProductDetailsComponent = ({ idProduct }) => {
     queryFn: () => fetchGetDetailsProduct(idProduct),
     enabled: !!idProduct,
   });
+
   const handleAddOrderProduct = () => {
     if (!user?.id) {
       navigate("/sign-in", { state: location?.pathname });
@@ -64,7 +64,7 @@ const ProductDetailsComponent = ({ idProduct }) => {
             image: productDetails?.image,
             price: productDetails?.price,
             product: productDetails?._id,
-            dicount: productDetails?.discount,
+            dicount: productDetails?.discount
           },
         })
       );
@@ -179,7 +179,7 @@ const ProductDetailsComponent = ({ idProduct }) => {
               flexDirection: "column",
               alignItems: "center",
               gap: "10px",
-              
+
             }}
           >
             <ButtonComponent
@@ -188,13 +188,11 @@ const ProductDetailsComponent = ({ idProduct }) => {
                 backgroundColor: "rgb(97, 193, 72)",
                 width: "100%",
                 height: "50px",
-                height: "50px",// Đảm bảo cả hai nút có cùng chiều rộng\
-            
               }}
               styleTextButton={{
                 color: "#fff",
                 fontWeight: "bold",
-                
+
               }}
               onClick={handleAddOrderProduct}
               textButton={"Chọn mua"}
@@ -203,7 +201,7 @@ const ProductDetailsComponent = ({ idProduct }) => {
             <ButtonComponent
               size={20}
               styleButton={{
-                border:"2px solid green",
+                border: "2px solid green",
                 // backgroundColor: "rgb(97, 193, 72)",
                 width: "100%",
                 height: "50px", // Đảm bảo cả hai nút có cùng chiều rộng
@@ -219,67 +217,62 @@ const ProductDetailsComponent = ({ idProduct }) => {
 
         </Col>
       </Row>
-    <Row style={{backgroundColor:"#fff", borderRadius:"8px",marginTop:"10px", padding:"10px"}}>
-      <div style={{width:"100%"}}>
-          <span style={{fontSize:"20px", display:"flex"}}> ĐIỂM NỖI BẬC</span> 
-          <span style={{fontSize:"300%", display:"flex",color:"blue",justifyContent:"center",marginBottom:"20px",fontFamily:"self"}}>{productDetails?.name}</span>
+      <Row style={{ backgroundColor: "#fff", borderRadius: "8px", marginTop: "10px", padding: "10px" }}>
+        <div style={{ width: "100%" }}>
+          <span style={{ fontSize: "20px", display: "flex" }}> ĐIỂM NỖI BẬC</span>
+          <span style={{ fontSize: "300%", display: "flex", color: "blue", justifyContent: "center", marginBottom: "20px", fontFamily: "self" }}>
+            {productDetails?.name}
+          </span>
 
-      </div>
-      
-      <div style={{ width: "100%", borderTop: "2px solid #ccc"  }}>
-  <p style={{ color: "#FF8C00" }}>MÔ TẢ SẢN PHẨM: </p>
-  <p style={{ fontSize:"20px" }}>{productDetails?.description}</p>
-  <div style={{textAlign:"center"}}><Image
-    style={{
-      marginTop: "0",
-      marginBottom: "0",
-      border: "1px solid #00FF00",
-      width: "300px",
-      borderRadius: "50%"
-    }}
-    src={productDetails?.image}
-    alt="image product"
-    preview={false}
-  /></div>
-</div>
-<div style={{ width: "100%", borderTop: "2px solid #ccc", marginTop: "20px" }}>
-  <div style={{ display: "flex", alignItems: "center"}}>
-    <b style={{ fontSize: "20px", color: "#556B2F" }}>Xuất xứ:</b>
-    <span style={{ marginLeft: "10px", fontSize:"18px",marginTop:"5px" }}>Ấn Độ.</span>
-  </div>
-</div>
-  
-<div style={{ width: "100%", borderTop: "2px solid #ccc", marginTop: "20px" }}>
-  <div style={{ display: "flex", alignItems: "center"}}>
-    <b style={{ fontSize: "20px", color: "#556B2F" }}>Công dụng:</b>
-    <span style={{ marginLeft: "10px", fontSize:"18px",marginTop:"5px" ,display:"flex"}}>
-    Thuốc trừ sâu sinh học được chiết xuất từ cây Neem (sầu đâu), có tác dụng phòng trừ nhiều loại sâu hại như ruồi đục lá, rệp sáp, bọ cánh tơ,sâu tơ,sâu xanh da láng.
-    </span>
-  </div>
-</div>
-   {/* -------------------------------- */}
-   <div style={{ width: "100%", borderTop: "2px solid #ccc", marginTop: "20px" }}>
-  <div style={{ display: "flex", alignItems: "center" }}>
-    <b style={{ fontSize: "20px", color: "#556B2F" }}>Hướng dẫn sử dụng:</b>
-    <span style={{ marginLeft: "10px", fontSize:"18px",marginTop:"5px" }}>thể tích</span>
-  </div>
-</div>
-{/* ------------------------ */}
+        </div>
 
-<div style={{ width: "100%", borderTop: "2px solid #ccc", marginTop: "20px" }}>
-  <div style={{ display: "flex", alignItems: "center"}}>
-    <b style={{ fontSize: "20px", color: "#556B2F" }}>Cảnh báo an toàn:</b>
-    <span style={{ marginLeft: "10px", fontSize:"18px",marginTop:"5px" }}>thể tích</span>
-  </div>
-</div>
+        <div style={{ width: "100%", borderTop: "2px solid #ccc" }}>
+          <p style={{ color: "#FF8C00" }}>MÔ TẢ SẢN PHẨM: </p>
+          <p style={{ fontSize: "20px" }}>{productDetails?.description}</p>
+          <div style={{ textAlign: "center" }}><Image
+            style={{
+              marginTop: "0",
+              marginBottom: "0",
+              border: "1px solid #00FF00",
+              width: "300px",
+              borderRadius: "50%"
+            }}
+            src={productDetails?.image}
+            alt="image product"
+            preview={false}
+          /></div>
+        </div>
+        <div style={{ width: "100%", borderTop: "2px solid #ccc", marginTop: "20px" }}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <b style={{ fontSize: "20px", color: "#556B2F" }}>Xuất xứ:</b>
+            <span style={{ marginLeft: "10px", fontSize: "18px", marginTop: "5px" }}>{productDetails?.origin}</span>
+          </div>
+        </div>
 
-<div style={{ width: "100%", borderTop: "2px solid #ccc", marginTop: "20px" }}>
-  <div style={{ display: "flex", alignItems: "center"}}>
-    <b style={{ fontSize: "20px", color: "#556B2F" }}>Cách bảo quản:</b>
-    <span style={{ marginLeft: "10px", fontSize:"18px",marginTop:"5px" }}>thể tích</span>
-  </div>
-</div>
-    </Row>
+        <div style={{ width: "100%", borderTop: "2px solid #ccc", marginTop: "20px" }}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <b style={{ fontSize: "20px", color: "#556B2F" }}>Công dụng:</b>
+            <span style={{ marginLeft: "10px", fontSize: "18px", marginTop: "5px", display: "flex" }}>
+              {productDetails?.uses}
+            </span>
+          </div>
+        </div>
+        {/* -------------------------------- */}
+
+        <div style={{ width: "100%", borderTop: "2px solid #ccc", marginTop: "20px" }}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <b style={{ fontSize: "20px", color: "#556B2F" }}>Cảnh báo an toàn:</b>
+            <span style={{ marginLeft: "10px", fontSize: "18px", marginTop: "5px" }}>{productDetails?.report}</span>
+          </div>
+        </div>
+
+        <div style={{ width: "100%", borderTop: "2px solid #ccc", marginTop: "20px" }}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <b style={{ fontSize: "20px", color: "#556B2F" }}>Cách bảo quản:</b>
+            <span style={{ marginLeft: "10px", fontSize: "18px", marginTop: "5px" }}>{productDetails?.preserve}</span>
+          </div>
+        </div>
+      </Row>
     </div>
   );
 };

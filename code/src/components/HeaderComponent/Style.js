@@ -18,16 +18,26 @@ text-align: left;
     cursor: pointer;
 }
 `
-export const WrapperHeaderAccount = styled.div`
+export const WrapperHeaderMap = styled.div`
 display: flex;
 align-items: center;
 color: #fff;
 gap: 10px;
 &:hover{
-    color:rgb(26, 148, 255);
-    cursor: pointer;
+  color:rgb(26, 148, 255);
+  cursor: pointer;
 }
 `
+export const WrapperHeaderAccount = styled.div`
+display: flex;
+align-items: center;
+gap: 10px;
+&:hover{
+  color:rgb(26, 148, 255);
+  cursor: pointer;
+}
+`
+
 export const WrapperTextHeaderSmall = styled.span`
 font-size: 15px;
 color: #fff;

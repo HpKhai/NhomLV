@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 
 export const WrapperHeader = styled(Row)`
-padding: 10px 120px;
+padding: 20px 120px;
 background-color: rgb(54, 170, 0);
 align-items: center;
 gap: 16px;
@@ -39,3 +39,35 @@ export const WrapperContentPopup = styled.p`
     cursor: pointer;
 }
 `
+
+export const stylesHeader = styled.div`
+    container: {
+      display: 'flex',
+      alignItems: 'center',
+      backgroundColor: '#2cba4b', // Green background color
+      padding: '10px 20px',
+      borderRadius: '8px',
+    },
+    circle: {
+      backgroundColor: '#fff',
+      borderRadius: '50%',
+      width: '40px',
+      height: '40px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: '10px',
+    },
+    symbol: {
+      color: '#2cba4b', // Matches the green background
+      fontSize: '20px',
+      fontWeight: 'bold',
+      fontFamily: 'Arial, sans-serif',
+    },
+    text: {
+      color: '#fff',
+      fontSize: '18px',
+      fontWeight: 'bold',
+      fontFamily: 'Arial, sans-serif',
+    },
+  `

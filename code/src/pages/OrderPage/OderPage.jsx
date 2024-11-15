@@ -256,7 +256,6 @@ const OrderPage = () => {
                     </WrapperLeft>
                     <WrapperRight>
                         <div>
-
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 <span style={{ fontSize: '16px' }}>Phiếu tổng tiền</span>
                                 <span style={{ color: '#000', fontSize: '14px', fontWeight: 'bold' }}></span>

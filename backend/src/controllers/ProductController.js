@@ -6,7 +6,8 @@ const ProductService = require('../services/ProductService');
 const createProduct = async (req, res) => {
     try {
         console.log('req.body', req.body)
-        const { name, image, type, price, countInStock, rating, description, discount } = req.body
+        const { name, image, type, price, countInStock, rating, description, discount
+            , origin, uses, report, preserve } = req.body
         if (!name) {
             return res.status(400).json({
                 status: 'ERR',
@@ -27,12 +28,38 @@ const createProduct = async (req, res) => {
                 status: 'ERR',
                 message: 'The input price is required'
             })
-        } else if (!countInStock) {
+        } else if (!description) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'The input price is required'
+            })
+        }
+        else if (!countInStock) {
             return res.status(400).json({
                 status: 'ERR',
                 message: 'The input cit is required'
             })
         } else if (!rating) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'The input rating is required'
+            })
+        } else if (!uses) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'The input rating is required'
+            })
+        } else if (!origin) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'The input rating is required'
+            })
+        } else if (!report) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'The input rating is required'
+            })
+        } else if (!preserve) {
             return res.status(400).json({
                 status: 'ERR',
                 message: 'The input rating is required'

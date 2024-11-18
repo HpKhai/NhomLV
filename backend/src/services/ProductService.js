@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt")
 
 const createProduct = (newProduct) => {
     return new Promise(async (resolve, reject) => {
-        const { name, image, type, price, countInStock, rating, description, discount } = newProduct
+        const { name, image, type, price, countInStock, rating, description, discount, origin, uses, report, preserve } = newProduct
         try {
             const checkProduct = await Product.findOne({
                 name: name
@@ -18,7 +18,7 @@ const createProduct = (newProduct) => {
             }
 
             const createdProduct = await Product.create({
-                name, image, type, price, countInStock, rating, description, discount
+                name, image, type, price, countInStock, rating, description, discount, origin, uses, report, preserve
             })
             if (createdProduct) {
                 resolve({

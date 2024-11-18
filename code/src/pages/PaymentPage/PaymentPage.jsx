@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { WrapperInfo, WrapperLeft, WrapperRight, WarpperRadio } from "./style"
+import { WrapperInfo, WrapperLeft, WrapperRight } from "./style"
 import { Form, Radio, message } from "antd"
 import { useDispatch, useSelector } from "react-redux"
 import { convertPrice } from "../../utils"
@@ -9,13 +9,11 @@ import InputComponents from "../../components/InputComponents/InputComponents"
 import { useMutationHooks } from "../../hooks/useMutationHooks"
 import * as UserService from "../../service/UserService"
 import * as OrderService from "../../service/OrderService"
+import * as PaymentService from "../../service/PaymentService"
 import { updateUser } from "../../redux/slides/userSlide"
 import { useNavigate } from "react-router"
 import { removeAllOrder } from "../../redux/slides/orderSlide"
-
-
-
-
+import { PayPalButton } from "react-paypal-button-v2"
 
 const PaymentPage = () => {
     const order = useSelector((state) => state.order)
@@ -23,6 +21,7 @@ const PaymentPage = () => {
     const [isModalUpdateInfo, setIsModalUpdateInfo] = useState(false)
     const [payment, setPayment] = useState('later_money')
     const [delivery, setDelivery] = useState('fast')
+    const [sdkReady, setSdkReady] = useState(false)
     const navigate = useNavigate()
 
     const dispatch = useDispatch()
@@ -129,6 +128,7 @@ const PaymentPage = () => {
                     address: user?.address,
                     phone: user?.phone,
                     city: user?.city,
+                    shippingMethod: delivery,
                     paymentMethod: payment,
                     itemsPrice: priceMemo,
                     shippingPrice: deliveryPrice,
@@ -180,41 +180,91 @@ const PaymentPage = () => {
             [e.target.name]: e.target.value
         }))
     }
-    const handleDelivery = (e) => {
-        if (e.target.value === delivery) {
-            setDelivery('')
-        } else {
-            setDelivery(e.target.value)
+    const handleDelivery = (e) => setDelivery(e.target.value);
+    const handlePayment = (e) => setPayment(e.target.value);
+
+    const addPaypalScript = async () => {
+        const { data } = await PaymentService.getConfig()
+        const script = document.createElement('script')
+        script.type = 'text/javascript'
+        script.type = `https://sandbox.paypal.com/sdk/js?client-id=${data}`
+        script.async = true
+        script.onload = () => {
+            setSdkReady(true)
         }
+        document.body.appendChild(script)
     }
-    const handlePayment = (e) => {
-        if (e.target.value === delivery) {
-            setPayment('')
+    useEffect(() => {
+        if (!window.paypal) {
+            addPaypalScript()
         } else {
-            setPayment(e.target.value)
+            setSdkReady(true)
         }
+    }, [])
+
+    const onSuccessPaypal = (details, data) => {
+        mutationAddOrder.mutate(
+            {
+                token: user?.access_token,
+                orderItems: order?.orderItemsSelected,
+                fullName: user?.name,
+                address: user?.address,
+                phone: user?.phone,
+                city: user?.city,
+                shippingMethod: delivery,
+                paymentMethod: payment,
+                itemsPrice: priceMemo,
+                shippingPrice: deliveryPrice,
+                totalPrice: totalPriceMemo,
+                user: user?.id,
+                email: user?.email,
+                isPaid: true,
+                paidAt: details.update_time,
+            },
+            {
+                onSuccess: () => {
+                    const arrayOrdered = []
+                    order?.orderItemsSelected?.forEach(element => {
+                        arrayOrdered.push(element.product)
+                    })
+                    dispatch(removeAllOrder({ listCheck: arrayOrdered }))
+                    message.success("Đặt hàng thành công")
+                    navigate('/ordersuccess', {
+                        state: {
+                            delivery,
+                            payment,
+                            orders: order?.orderItemsSelected,
+                            totalPrice: totalPriceMemo,
+
+                        }
+                    })
+                }
+            }
+        )
     }
+
     return (
         <div className="container" style={{ background: '#f5f5fa', width: '100%', height: '100vh' }}>
             <div style={{ height: '100%', width: '100%', margin: '0 auto' }}>
                 <h2>Phương thức thanh toán</h2>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <WrapperLeft>
+                        <label style={{ fontSize: '16px', fontWeight: 'bold' }}>Chọn phương thức giao hàng</label>
                         <WrapperInfo>
                             <div>
-                                <label style={{ fontSize: '14px' }}>Chọn phương thức giao hàng</label>
-                                <WarpperRadio onChange={handleDelivery} value={delivery}>
+                                <Radio.Group onChange={handleDelivery} value={delivery} >
                                     <Radio value="fast"> <span style={{ color: '#ea8500', fontWeight: 'bold' }}>FAST</span>Giao hàng nhanh</Radio>
                                     <Radio value="gojek"> <span style={{ color: '#ea8500', fontWeight: 'bold' }}>GO_JEK</span>Giao hàng tiết kiệm</Radio>
-                                </WarpperRadio>
+                                </Radio.Group>
                             </div>
                         </WrapperInfo>
+                        <label style={{ fontSize: '16px', fontWeight: 'bold' }}>Chọn phương thức thanh toán</label>
                         <WrapperInfo>
                             <div>
-                                <label style={{ fontSize: '14px' }}>Chọn phương thức thanh toán</label>
-                                <WarpperRadio onChange={handlePayment} value={payment}>
+                                <Radio.Group onChange={handlePayment} value={payment}>
                                     <Radio value="later_money">Thanh toán khi nhận hàng</Radio>
-                                </WarpperRadio>
+                                    <Radio value="paypal">Thanh toán bằng paypal</Radio>
+                                </Radio.Group>
                             </div>
                         </WrapperInfo>
 
@@ -226,7 +276,7 @@ const PaymentPage = () => {
                                 <span style={{ fontSize: '16px' }}>Phiếu tổng tiền</span>
                                 <span style={{ color: '#000', fontSize: '14px', fontWeight: 'bold' }}></span>
                             </div>
-                            <WrapperInfo>
+                            <WrapperInfo style={{ width: '100%' }}>
                                 <div style={{ fontSize: '13px' }}>
                                     <span>Địa chỉ: </span>
                                     <span style={{ fontWeight: 'bold' }}>{`${user.address} - ${user.city}`}</span>
@@ -235,7 +285,7 @@ const PaymentPage = () => {
 
                             </WrapperInfo>
 
-                            <WrapperInfo>
+                            <WrapperInfo style={{ width: '100%' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '14px' }}>
                                     <span>Tạm tính</span>
                                     <span style={{ color: '#000', fontWeight: 'bold' }}>{convertPrice(priceMemo)}</span>
@@ -248,31 +298,47 @@ const PaymentPage = () => {
                                     <span>Vận chuyển</span>
                                     <span style={{ color: '#000', fontWeight: 'bold' }}>{convertPrice(deliveryPrice)}</span>
                                 </div>
+                                <br /><br />
+                                <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '14px' }}>
+                                    <span>Thành tiền</span>
+                                    <span style={{ color: '#000', fontSize: '16px', fontWeight: 'bold' }}>{convertPrice(totalPriceMemo)}</span>
+                                </div>
 
                             </WrapperInfo>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '14px' }}>
-                                <span>Thành tiền</span>
-                                <span style={{ color: '#000', fontSize: '16px', fontWeight: 'bold' }}>{convertPrice(totalPriceMemo)}</span>
-                            </div>
+
                         </div>
-                        <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
-                            <ButtonComponent
-                                onClick={() => handleAddOrder()}
-                                size={40}
-                                styleButton={{
-                                    padding: '10px 20px',
-                                    backgroundColor: '#61c148',
-                                    color: '#fff',
-                                    border: 'none',
-                                    borderRadius: '5px',
-                                    cursor: 'pointer',
-                                    fontSize: '16px',
-                                    fontWeight: 'bold'
+                        {payment === 'paypal' ? (
+                            <PayPalButton
+                                amount={totalPriceMemo / 25000}
+                                // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
+                                onSuccess={onSuccessPaypal}
+                                onError={() => {
+                                    alert("Error");
                                 }}
-                                textButton={"Mua hàng"}
-                            >
-                            </ButtonComponent>
-                        </div>
+                            />
+                        ) : (
+                            <div style={{ display: 'flex', justifyContent: 'center', }}>
+                                <ButtonComponent
+                                    onClick={() => handleAddOrder()}
+                                    size={40}
+                                    styleButton={{
+                                        width: '100%',
+                                        marginTop: '20px',
+                                        padding: '10px 20px',
+                                        backgroundColor: '#61c148',
+                                        color: '#fff',
+                                        border: 'none',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer',
+                                        fontSize: '16px',
+                                        fontWeight: 'bold'
+                                    }}
+                                    textButton={"Mua hàng"}
+                                >
+                                </ButtonComponent>
+                            </div>
+                        )}
+
                     </WrapperRight>
                 </div>
             </div>
@@ -326,7 +392,7 @@ const PaymentPage = () => {
                     </Form>
                 </div>
             </ModalComponent>
-        </div>
+        </div >
     )
 }
 

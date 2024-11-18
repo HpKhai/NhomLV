@@ -1,4 +1,4 @@
-const cookieParser =require ('cookie-parser')
+const cookieParser = require('cookie-parser')
 const JwtService = require('../services/JwtService')
 const UserService = require('../services/UserService')
 
@@ -11,22 +11,22 @@ const createUser = async (req, res) => {
         const isCheckEmail = regemail.test(email)
         const isCheckName = regname.test(name)
 
-        if (!name || !email || !phone || !password || !confirmPassword ) {
+        if (!name || !email || !phone || !password || !confirmPassword) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The input is required'
             })
-        }else if (!isCheckEmail) {
+        } else if (!isCheckEmail) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The input is email'
             })
-        }else if (!isCheckName) {
+        } else if (!isCheckName) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'A string containing uppercase letters, lowercase letters and numbers.'
             })
-        }else  if (password !== confirmPassword) {
+        } else if (password !== confirmPassword) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The password is equal confirmPassword'
@@ -39,7 +39,7 @@ const createUser = async (req, res) => {
             message: e
         })
     }
-    
+
 }
 
 const loginUser = async (req, res) => {
@@ -47,7 +47,7 @@ const loginUser = async (req, res) => {
         const { name, password } = req.body
         const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]+$/
         // const isCheckName = reg.test(name)
-        if (!name || !password ) {
+        if (!name || !password) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The input is required'
@@ -60,7 +60,7 @@ const loginUser = async (req, res) => {
         //     })
         // }
         const response = await UserService.loginUser(req.body)
-        const {refresh_token, ... newResponse} = response
+        const { refresh_token, ...newResponse } = response
         // console.log('response',response)
         res.cookie('refresh_token', refresh_token, {
             HttpOnly: true,
@@ -80,7 +80,7 @@ const updateUser = async (req, res) => {
     try {
         const userId = req.params.id
         const data = req.body
-        if(!userId){
+        if (!userId) {
             return res.status(400).json({
                 status: 'ERR',
                 message: 'The userID is required'
@@ -100,7 +100,7 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         const userId = req.params.id
-        if(!userId){
+        if (!userId) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The userID is required'
@@ -119,7 +119,7 @@ const deleteUser = async (req, res) => {
 const deleteManyUser = async (req, res) => {
     try {
         const ids = req.body.ids
-        if(!ids){
+        if (!ids) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The ids is required'
@@ -151,7 +151,7 @@ const getAllUser = async (req, res) => {
 const getDetailsUser = async (req, res) => {
     try {
         const userId = req.params.id
-        if(!userId){
+        if (!userId) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The userID is required'
@@ -171,7 +171,7 @@ const getDetailsUser = async (req, res) => {
 const refreshToken = async (req, res) => {
     try {
         const token = req.cookies.refresh_token
-        if(!token){
+        if (!token) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The token is required'
@@ -187,18 +187,26 @@ const refreshToken = async (req, res) => {
 
 }
 
+
 const logoutUser = (req,res) => {
+
     try {
-        res.clearCookie('refresh_token')
+        // Xóa cookie 'refresh_token'
+        res.clearCookie('refresh_token');
+
+        // Trả về phản hồi thành công
         return res.status(200).json({
+
             status:'OK',
             message:'Logout SUCCESS'
         });
     } catch (e) {
+        // Trả về lỗi nếu có vấn đề
         return res.status(404).json({
             message: e.message
         });
     }
+};
 
 };
 module.exports = {

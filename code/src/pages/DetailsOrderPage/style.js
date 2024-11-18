@@ -34,10 +34,11 @@ export const WrapperLabel = styled.div`
   font-size: 13px;
   text-transform: uppercase;
   margin-bottom: 15px;
+  
 `
 export const WrapperContentInfo = styled.div`
   height: 118px;
-  width: 100%;
+  width: 300px;
   background-color: #fff;
   border-radius: 6px;
   padding: 10px;

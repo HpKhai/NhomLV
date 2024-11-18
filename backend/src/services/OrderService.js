@@ -1,11 +1,12 @@
-
 const Order = require("../models/OrderModel")
 const Product = require("../models/ProductModel")
+const EmailService = require("../services/EmailService")
 
 
 const createOrder = (newOrder) => {
     return new Promise(async (resolve, reject) => {
-        const { orderItems, paymentMethod, itemsPrice, shippingPrice, totalPrice, fullName, address, city, phone, user } = newOrder
+        const { orderItems, paymentMethod, shippingMethod, itemsPrice, shippingPrice, totalPrice, isPaid, paidAt,
+            fullName, address, city, phone, user, email } = newOrder
         try {
             const promises = orderItems.map(async (order) => {
                 const productData = await Product.findOneAndUpdate(
@@ -32,16 +33,20 @@ const createOrder = (newOrder) => {
                             phone
                         },
                         paymentMethod,
+                        shippingMethod,
+                        isPaid,
+                        paidAt,
                         itemsPrice,
                         shippingPrice,
                         totalPrice,
-                        user,
+                        user: user,
                     })
                     if (createdOrder) {
-                        return {
+                        await EmailService.sendEmailCreateOrder(email, orderItems)
+                        resolve({
                             status: 'OK',
-                            message: 'SUCCESS',
-                        }
+                            message: 'success'
+                        })
                     }
                 } else {
                     return {
@@ -50,19 +55,6 @@ const createOrder = (newOrder) => {
                         id: order.product
                     }
                 }
-            })
-            const results = await Promise.all(promises)
-            const newData = results && results.filter((item) => item.id)
-            console.log('results', results)
-            if (newData.length) {
-                resolve({
-                    status: 'ERR',
-                    message: `Sản phẩm với id${newData.join(',')} không đủ hàng`
-                })
-            }
-            resolve({
-                status: 'OK',
-                message: 'Success'
             })
         } catch (e) {
             reject(e)

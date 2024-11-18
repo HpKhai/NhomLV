@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "leaflet-routing-machine": "^3.2.12"
+    "leaflet-routing-machine": "^3.2.12",
+    "react-paypal-button-v2": "^2.6.3"
   }
 }

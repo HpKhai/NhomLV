@@ -10,7 +10,7 @@ export const WrapperLeft = styled.div`
 `
 
 export const WrapperRight = styled.div`
-    width: 300px;
+    width: 30%;
     padding: 20px;
     background: white;
     border-radius: 8px;
@@ -50,8 +50,16 @@ export const WrapperPriceDiscount = styled.span`
 
 export const WrapperInfo = styled.div`
     margin-top: 20px;
-    padding: 10px;
     border-top: 1px solid #eee;
+    padding: 10px 0;
+    background: rgb(240, 248, 255);
+    border: 1px solid rgb(194, 225, 255);
+    width:40%;
+    border-radius:10px;
+    .ant-radio-wrapper {
+        display: block; 
+        margin-bottom: 10px; 
+    }
 `
 
 
@@ -65,18 +73,4 @@ export const WrapperInputNumber = styled(InputNumber)`
     }
 
 `
-export const WarpperRadio = styled.div`
-    flex: 1;
-    margin-top: 10px; /* Khoảng cách trên */
-    margin-bottom: 10px; /* Khoảng cách dưới */
-    background: rgb(240, 248, 255);
-    border: 1px solid rgb(194, 225, 255);
-    padding: 10px;
-    width:40%;
-    border-radius:10px;
-    /* Đảm bảo mỗi radio button nằm trên một dòng */
-    .ant-radio-wrapper {
-        display: block; /* Mỗi radio button nằm riêng một dòng */
-        margin-bottom: 10px; /* Khoảng cách giữa các radio button */
-    }
-`
+

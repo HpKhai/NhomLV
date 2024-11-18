@@ -36,7 +36,7 @@ const DetailsOrderPage = () => {
   return (
     <div style={{ width: '100%', height: '100vh', background: '#f5f5fa' }}>
       <div style={{ width: '80%', margin: '0 auto', height: '100%' }}>
-        <h4>Chi tiết đơn hàng</h4>
+        <h2 style={{alignItems:"center"}}>Chi tiết đơn hàng</h2>
         <WrapperHeaderUser>
           <WrapperInfoUser>
             <WrapperLabel>Địa chỉ người nhận</WrapperLabel>

@@ -36,7 +36,7 @@ const DetailsOrderPage = () => {
   return (
     <div style={{ width: '100%', height: '100vh', background: '#f5f5fa' }}>
       <div style={{ width: '80%', margin: '0 auto', height: '100%' }}>
-        <h4>Chi tiết đơn hàng</h4>
+        <h4 style={{fontSize:"20px"}}>Chi tiết đơn hàng</h4>
         <WrapperHeaderUser>
           <WrapperInfoUser>
             <WrapperLabel>Địa chỉ người nhận</WrapperLabel>
@@ -62,8 +62,8 @@ const DetailsOrderPage = () => {
           </WrapperInfoUser>
         </WrapperHeaderUser>
         <WrapperStyleContent>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ width: '50%' }}>Sản phẩm</div>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' ,fontSize:"20px"}}>
+            <div style={{ width: '50%' ,fontSize:"20px"}}>Sản phẩm</div>
             <WrapperItemLabel>Giá</WrapperItemLabel>
             <WrapperItemLabel>Số lượng</WrapperItemLabel>
             <WrapperItemLabel>Giảm giá</WrapperItemLabel>
@@ -88,6 +88,7 @@ const DetailsOrderPage = () => {
                     whiteSpace: 'nowrap',
                     marginLeft: '10px',
                     height: '70px',
+                    fontSize:"10px",
                   }}>{order.name}</div>
                 </WrapperNameProduct>
                 <WrapperItem>{convertPrice(order?.price)}</WrapperItem>

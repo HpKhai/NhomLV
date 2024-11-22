@@ -133,7 +133,7 @@ const SignUpPage = () => {
    </WrapperContainerLeft>
    <WrapperContainerRight>
      <Image src={imageLogo} preview={false} alt='image-logo' height= "203px" width="203px"/>
-     <h4>Cửa Hàng Nông Nghiêp</h4>
+     <h4 >Cửa Hàng Nông Nghiêp</h4>
    </WrapperContainerRight>
  </div> 
  </div>

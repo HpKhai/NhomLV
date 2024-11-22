@@ -64,7 +64,7 @@ const OrderSuccess = () => {
                             })}
                         </WrapperItemOrderInfo>
                         <span>
-                            <span style={{ fontSize: '13px', color: 'red' }}>Tổng tiền {convertPrice(state?.totalPrice)}</span>
+                            <span style={{ fontSize: '13px', color: 'red' }}>Tổng tiền: {convertPrice(state?.totalPrice)}</span>
                         </span>
                     </WrapperContainer>
                 </div>

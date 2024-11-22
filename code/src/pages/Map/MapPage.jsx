@@ -5,6 +5,7 @@ import L from 'leaflet';
 import 'leaflet-routing-machine';
 import customIconUrl from '../../components/Image/location-icon.png'
 import storeIconUrl from '../../components/Image/cua-hang.png'
+import * as StoreService from '../../service/StoreService'
 
 // Khởi tạo biểu tượng tùy chỉnh cho Marker
 const customIcon = new L.Icon({
@@ -48,11 +49,21 @@ const RoutingControl = ({ from, to, onRouteFound }) => {
 };
 
 const MapComponent = () => {
-  const [position, setPosition] = useState([10.031, 105.785]); // Vị trí mặc định gần đó
+  const [position, setPosition] = useState([0,0]); // Vị trí mặc định gần đó
   const [gpsPosition, setGpsPosition] = useState(null); // Vị trí GPS người dùng
   const [destination, setDestination] = useState(null); // Vị trí người dùng nhấp
   const [showRoute, setShowRoute] = useState(false);
   const [distance, setDistance] = useState(null);
+  const [stores, setStores] = useState([]);
+
+  // Lấy danh sách cửa hàng đang có
+useEffect(() => {
+  const fetchStores = async () => {
+    const res = await StoreService.getAllStore('', 100)
+    setStores(res.data)
+}
+fetchStores();
+}, []);
 
   // Lấy vị trí hiện tại của người dùng và cập nhật gpsPosition
   useEffect(() => {
@@ -77,8 +88,9 @@ const MapComponent = () => {
 
   return (
     <div>
-      <MapContainer
-        center={position}
+      {gpsPosition && ( 
+        <MapContainer
+        center={gpsPosition}
         zoom={13}
         style={{ width: '100%', height: '600px' }}
       >
@@ -88,15 +100,6 @@ const MapComponent = () => {
         />
 
         {/* Marker cho vị trí hiện tại */}
-        <Marker
-          position={position}
-          icon={storeIcon}
-          eventHandlers={{
-            click: () => handleMarkerClick(position), // Nhấp vào marker để chỉ đường
-          }}
-        >
-          <Popup>Cửa hàng NNX</Popup>
-        </Marker>
 
         {/* Marker cho vị trí GPS của người dùng */}
         {gpsPosition && (
@@ -106,15 +109,19 @@ const MapComponent = () => {
         )}
 
         {/* Marker cho điểm đến */}
-        <Marker
-          position={[10.035, 105.785]} // Ví dụ về vị trí điểm đến
-          icon={storeIcon}
-          eventHandlers={{
-            click: () => handleMarkerClick([10.035, 105.785]), // Nhấp vào marker để chỉ đường
-          }}
-        >
-          <Popup>Cửa hàng NNX1</Popup>
-        </Marker>
+        {
+          stores.map((store, index) => ( 
+            <Marker
+            position={[store.x, store.y]} // Ví dụ về vị trí điểm đến
+            icon={storeIcon}
+            eventHandlers={{
+              click: () => handleMarkerClick([store.x, store.y]), // Nhấp vào marker để chỉ đường
+            }}
+          >
+            <Popup>{ store.name }</Popup>
+            </Marker> 
+          ))
+        }
 
         {/* Thêm RoutingControl khi có điểm đến */}
         {showRoute && destination && (
@@ -125,8 +132,9 @@ const MapComponent = () => {
           />
         )}
       </MapContainer>
+)}
 
-      {distance && (
+      {gpsPosition && distance && (
         <div
           style={{
             padding: '10px',

@@ -13,7 +13,8 @@ import AdminPage from "../pages/AdminPage/AdminPage"
 import MapPage from "../pages/Map/MapPage"
 import PaymentPage from "../pages/PaymentPage/PaymentPage"
 import OrderSuccess from "../pages/OrderSuccess/OrderSuccess"
-
+import FormDKCH from "../pages/FormDKCH/Form"
+import { Form } from "antd"
 
 
 export const routes = [
@@ -87,6 +88,11 @@ export const routes = [
         page: AdminPage,
         isShowHeader: false,
         isPrivate: true,
+    },
+    {
+        path: '/formdk',
+        page: Form,
+        isShowHeader: true
     },
 
     {

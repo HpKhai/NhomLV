@@ -3,6 +3,7 @@ const UserRouter = require ('./UserRouter')
 const ProductRouter = require ('./ProductRouter')
 const OrderRouter = require ('./OrderRouter')
 const StoreRouter = require ('./StoreRouter')
+const PaymentRouter = require ('./PaymentRouter')
 
 
 const routes = (app)=> {

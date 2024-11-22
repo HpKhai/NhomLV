@@ -42,7 +42,7 @@ const createOrder = (newOrder) => {
                         user: user,
                     })
                     if (createdOrder) {
-                        await EmailService.sendEmailCreateOrder(email, orderItems)
+                        // await EmailService.sendEmailCreateOrder(email, orderItems)
                         resolve({
                             status: 'OK',
                             message: 'success'

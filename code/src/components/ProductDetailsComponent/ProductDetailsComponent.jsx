@@ -66,7 +66,6 @@ const ProductDetailsComponent = ({ idProduct }) => {
             product: productDetails?._id,
             dicount: productDetails?.discount,
             countInStock: productDetails?.countInStock,
-
           },
         })
       );
@@ -181,7 +180,6 @@ const ProductDetailsComponent = ({ idProduct }) => {
               flexDirection: "column",
               alignItems: "center",
               gap: "10px",
-
             }}
           >
             <ButtonComponent
@@ -194,7 +192,6 @@ const ProductDetailsComponent = ({ idProduct }) => {
               styleTextButton={{
                 color: "#fff",
                 fontWeight: "bold",
-
               }}
               onClick={handleAddOrderProduct}
               textButton={"Chọn mua"}
@@ -211,67 +208,150 @@ const ProductDetailsComponent = ({ idProduct }) => {
               styleTextButton={{
                 color: "rgb(97, 193, 72)",
                 fontWeight: "bold",
-
               }}
               textButton={"Trả Góp"}
             ></ButtonComponent>
           </div>
-
         </Col>
       </Row>
-      <Row style={{ backgroundColor: "#fff", borderRadius: "8px", marginTop: "10px", padding: "10px" }}>
+      <Row
+        style={{
+          backgroundColor: "#fff",
+          borderRadius: "8px",
+          marginTop: "10px",
+          padding: "10px",
+        }}
+      >
         <div style={{ width: "100%" }}>
-          <span style={{ fontSize: "20px", display: "flex" }}> ĐIỂM NỖI BẬC</span>
-          <span style={{ fontSize: "300%", display: "flex", color: "blue", justifyContent: "center", marginBottom: "20px", fontFamily: "self" }}>
+          <span style={{ fontSize: "20px", display: "flex" }}>
+            {" "}
+            ĐIỂM NỖI BẬC
+          </span>
+          <span
+            style={{
+              fontSize: "300%",
+              display: "flex",
+              color: "blue",
+              justifyContent: "center",
+              marginBottom: "20px",
+              fontFamily: "self",
+            }}
+          >
             {productDetails?.name}
           </span>
-
         </div>
 
         <div style={{ width: "100%", borderTop: "2px solid #ccc" }}>
           <p style={{ color: "#FF8C00" }}>MÔ TẢ SẢN PHẨM: </p>
           <p style={{ fontSize: "20px" }}>{productDetails?.description}</p>
-          <div style={{ textAlign: "center" }}><Image
-            style={{
-              marginTop: "0",
-              marginBottom: "0",
-              border: "1px solid #00FF00",
-              width: "300px",
-              borderRadius: "50%"
-            }}
-            src={productDetails?.image}
-            alt="image product"
-            preview={false}
-          /></div>
+          <div style={{ textAlign: "center" }}>
+            <Image
+              style={{
+                marginTop: "0",
+                marginBottom: "0",
+                border: "1px solid #00FF00",
+                width: "300px",
+                borderRadius: "50%",
+              }}
+              src={productDetails?.image}
+              alt="image product"
+              preview={false}
+            />
+          </div>
         </div>
-        <div style={{ width: "100%", borderTop: "2px solid #ccc", marginTop: "20px" }}>
+        <div
+          style={{
+            width: "100%",
+            borderTop: "2px solid #ccc",
+            marginTop: "20px",
+          }}
+        >
           <div style={{ display: "flex", alignItems: "center" }}>
             <b style={{ fontSize: "20px", color: "#556B2F" }}>Xuất xứ:</b>
-            <span style={{ marginLeft: "10px", fontSize: "18px", marginTop: "5px" }}>{productDetails?.origin}</span>
+            <span
+              style={{ marginLeft: "10px", fontSize: "18px", marginTop: "5px" }}
+            >
+              {productDetails?.origin}
+            </span>
           </div>
         </div>
 
-        <div style={{ width: "100%", borderTop: "2px solid #ccc", marginTop: "20px" }}>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <b style={{ fontSize: "20px", color: "#556B2F" }}>Công dụng:</b>
-            <span style={{ marginLeft: "10px", fontSize: "18px", marginTop: "5px", display: "flex" }}>
+        <div
+          style={{
+            width: "100%",
+            borderTop: "2px solid #ccc",
+            marginTop: "20px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
+          >
+            <b style={{ fontSize: "20px", color: "#556B2F", display: "flex" }}>
+              Công dụng:
+            </b>
+            <span
+              style={{
+                marginLeft: "10px",
+                fontSize: "18px",
+                marginTop: "5px",
+                display: "flex",
+              }}
+            >
               {productDetails?.uses}
             </span>
           </div>
         </div>
         {/* -------------------------------- */}
 
-        <div style={{ width: "100%", borderTop: "2px solid #ccc", marginTop: "20px" }}>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <b style={{ fontSize: "20px", color: "#556B2F" }}>Cảnh báo an toàn:</b>
-            <span style={{ marginLeft: "10px", fontSize: "18px", marginTop: "5px" }}>{productDetails?.report}</span>
+        <div
+          style={{
+            width: "100%",
+            borderTop: "2px solid #ccc",
+            marginTop: "20px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
+          >
+            <b style={{ fontSize: "20px", color: "#556B2F" }}>
+              Cảnh báo an toàn:
+            </b>
+            <span
+              style={{ marginLeft: "10px", fontSize: "18px", marginTop: "5px" }}
+            >
+              {productDetails?.report}
+            </span>
           </div>
         </div>
 
-        <div style={{ width: "100%", borderTop: "2px solid #ccc", marginTop: "20px" }}>
-          <div style={{ display: "flex", alignItems: "center" }}>
+        <div
+          style={{
+            width: "100%",
+            borderTop: "2px solid #ccc",
+            marginTop: "20px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
+          >
             <b style={{ fontSize: "20px", color: "#556B2F" }}>Cách bảo quản:</b>
-            <span style={{ marginLeft: "10px", fontSize: "18px", marginTop: "5px" }}>{productDetails?.preserve}</span>
+            <span
+              style={{ marginLeft: "10px", fontSize: "18px", marginTop: "5px" }}
+            >
+              {productDetails?.preserve}
+            </span>
           </div>
         </div>
       </Row>

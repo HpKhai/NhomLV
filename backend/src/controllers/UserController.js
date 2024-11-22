@@ -208,7 +208,6 @@ const logoutUser = (req,res) => {
     }
 };
 
-};
 module.exports = {
     createUser,
     loginUser,

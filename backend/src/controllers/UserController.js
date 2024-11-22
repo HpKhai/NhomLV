@@ -187,15 +187,18 @@ const refreshToken = async (req, res) => {
 
 }
 
-const logoutUser = (req, res) => {
+
+const logoutUser = (req,res) => {
+
     try {
         // Xóa cookie 'refresh_token'
         res.clearCookie('refresh_token');
 
         // Trả về phản hồi thành công
         return res.status(200).json({
-            status: 'OK',
-            message: 'Logout SUCCESS'
+
+            status:'OK',
+            message:'Logout SUCCESS'
         });
     } catch (e) {
         // Trả về lỗi nếu có vấn đề
@@ -204,7 +207,6 @@ const logoutUser = (req, res) => {
         });
     }
 };
-
 
 module.exports = {
     createUser,

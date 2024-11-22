@@ -67,7 +67,7 @@ const ProfilePage = () =>{
             <WrapperHeader>Thông tin người dùng</WrapperHeader>
             <WrapperContentProfile>
                 <WrapperInput>
-                    <WrapperLabel>Name</WrapperLabel>
+                    <WrapperLabel>Tên</WrapperLabel>
                     <InputForm style={{ width:'100%' }} value={name} onChange = {handleOnchangeName}/>
                     {/* <ButtonComponent
                     onClick = {handleUpdate}
@@ -101,7 +101,7 @@ const ProfilePage = () =>{
                     </ButtonComponent> 
                 </WrapperInput>
                 <WrapperInput>
-                    <WrapperLabel>Phone</WrapperLabel>
+                    <WrapperLabel>SĐT</WrapperLabel>
                     <InputForm style={{ width:'60%' }} value={phone} onChange = {handleOnchangePhone}/>
                     <ButtonComponent
                     onClick = {handleUpdate}
@@ -118,7 +118,7 @@ const ProfilePage = () =>{
                     </ButtonComponent> 
                 </WrapperInput>
                 <WrapperInput>
-                    <WrapperLabel>Address</WrapperLabel>
+                    <WrapperLabel>Địa Chỉ</WrapperLabel>
                     <InputForm style={{ width:'60%' }} value={address} onChange = {handleOnchangeAddress}/>
                     <ButtonComponent
                     onClick = {handleUpdate}
@@ -135,7 +135,7 @@ const ProfilePage = () =>{
                     </ButtonComponent> 
                 </WrapperInput>
                 <WrapperInput>
-                    <WrapperLabel>Avatar</WrapperLabel>
+                    <WrapperLabel>Hình Ảnh</WrapperLabel>
                     <WrapperUploadFile onChange={handleOnchangeAvatar} maxCount={1}>
                         <Button icon={<UploadOutlined />}>Select File</Button>
                     </WrapperUploadFile>

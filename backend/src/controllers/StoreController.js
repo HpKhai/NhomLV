@@ -22,4 +22,4 @@ const createStore = async (req, res) => {
 module.exports = {
     createStore,
 
-};
+}

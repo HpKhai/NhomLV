@@ -30,5 +30,4 @@ const createStore = (newStore) => {
 }
 module.exports = {
     createStore,
-
 }

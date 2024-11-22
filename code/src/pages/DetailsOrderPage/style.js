@@ -34,14 +34,22 @@ export const WrapperLabel = styled.div`
   font-size: 13px;
   text-transform: uppercase;
   margin-bottom: 15px;
+  
 `
 export const WrapperContentInfo = styled.div`
   height: 118px;
-  width: 100%;
+  width: 300px;
   background-color: #fff;
   border-radius: 6px;
   padding: 10px;
-`
+  font-size: 13px;
+  & .address-info {
+  margin-top: 10px;
+  }
+  & .name-info{
+  margin-top: 7px;
+  }
+  `
 
 export const WrapperStyleContent = styled.div`
   display:flex;
@@ -59,25 +67,27 @@ export const WrapperProduct = styled.div`
 export const WrapperNameProduct = styled.div`
   display:flex;
   align-items: flex-start;
-  width: 50%;
+  width: 25%;
 `
 
 export const WrapperItem = styled.div`
   width: 25%;
+  font-size:20px;
   font-weight: bold;
+  text-align: center;
+  flex: 1;
   &:last-child {
     color: red
   }
 `
 export const WrapperItemLabel = styled.div`
   width: 25%;
+  font-size:20px;
+ font-weight: bold;
+ text-align: center;
+ 
   &:last-child {
     font-weight: bold;
   }
 `
 
-export const WrapperAllPrice = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end
-`

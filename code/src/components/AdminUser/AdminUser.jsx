@@ -383,7 +383,7 @@ const AdminUser = () => {
                     form={form}
                 >
                     <Form.Item
-                        label="Name"
+                        label="Tên Người Dùng"
                         name="name"
                         rules={[{ message: 'Please input name user!' }]}
                     >
@@ -399,7 +399,7 @@ const AdminUser = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Address"
+                        label="Địa Chỉ"
                         name="address"
                         rules={[{ required: true, message: 'Please input address user!' }]}
                     >
@@ -407,7 +407,7 @@ const AdminUser = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Phone"
+                        label="SĐT"
                         name="phone"
                         rules={[{ required: true, message: 'Please input phone user!' }]}
                     >
@@ -415,7 +415,7 @@ const AdminUser = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Image"
+                        label="Hình Ảnh"
                         name="image"
                         rules={[{ required: true, message: 'Please input image product!' }]}
                     >

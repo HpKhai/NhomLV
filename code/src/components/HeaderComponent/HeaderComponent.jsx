@@ -2,78 +2,96 @@ import { Badge, Col, Popover } from "antd";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { resetUser } from '../../redux/slides/userSlide';
+import { resetUser } from "../../redux/slides/userSlide";
 import { searchProduct } from "../../redux/slides/productSlide";
-import { WrapperHeader, WrapperTextHeader, WrapperHeaderAccount, WrapperTextHeaderSmall, WrapperContentPopup, WrapperHeaderMap } from "./Style";
-import ButtonSearch from '../ButtonSearch/ButtonSearch';
-import { UserOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import {
+  WrapperHeader,
+  WrapperTextHeader,
+  WrapperHeaderAccount,
+  WrapperTextHeaderSmall,
+  WrapperContentPopup,
+  WrapperHeaderMap,
+} from "./Style";
+import ButtonSearch from "../ButtonSearch/ButtonSearch";
+import { UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { FaMapLocationDot } from "react-icons/fa6";
-import * as UserService from '../../service/UserService';
+import * as UserService from "../../service/UserService";
 
 const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
-    const user = useSelector((state) => state.user);
-    const order = useSelector((state) => state.order);
-    const [userName, setUserName] = useState('');
-    const [userAvatar, setUserAvatar] = useState('');
-    const [isOpenPopup, setIsOpenPopup] = useState(false);
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+  const order = useSelector((state) => state.order);
+  const [userName, setUserName] = useState("");
+  const [userAvatar, setUserAvatar] = useState("");
+  const [isOpenPopup, setIsOpenPopup] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        setUserName(user?.name);
-        setUserAvatar(user?.avatar);
-    }, [user?.name, user?.avatar]);
+  useEffect(() => {
+    setUserName(user?.name);
+    setUserAvatar(user?.avatar);
+  }, [user?.name, user?.avatar]);
+
 
     const handleNavigateLogin = () => navigate('/sign-in');
     const handleNavigateHome = () => navigate('/');
     const handleNavigateMap = () => navigate('/map');
     const handleNavigateDK = () => navigate('/FormDK-CH');
 
+  const handleLogout = async () => {
+    await UserService.logoutUser(user?.access_token);
+    dispatch(resetUser());
+  };
 
-    const handleLogout = async () => {
-        await UserService.logoutUser(user?.access_token);
-        dispatch(resetUser());
-    };
 
     const onSearch = (e) => {
         dispatch(searchProduct(e.target.value))
     };
 
-    const content = (
-        <div>
-            <WrapperContentPopup onClick={() => handleClickNavigate('profile')}>Thông tin người dùng</WrapperContentPopup>
-            <WrapperContentPopup onClick={() => handleClickNavigate('order')}>Đơn hàng của tôi</WrapperContentPopup>
-            {user?.isAdmin && (
-                <WrapperContentPopup onClick={() => handleClickNavigate('admin')}>Quản lý hệ thống</WrapperContentPopup>
-            )}
-            <WrapperContentPopup onClick={() => handleClickNavigate('logout')}>Đăng xuất</WrapperContentPopup>
-        </div>
-    );
 
-    const handleClickNavigate = (type) => {
-        switch (type) {
-            case 'profile':
-                navigate('/profile-user');
-                break;
-            case 'admin':
-                navigate('/system/admin');
-                break;
-            case 'order':
-                navigate('/my-order', {
-                    state: {
-                        id: user?.id,
-                        token: user?.access_token
-                    }
-                });
-                break;
-            case 'logout':
-                handleLogout();
-                break;
-            default:
-                break;
-        }
-        setIsOpenPopup(false);
-    };
+  const content = (
+    <div>
+      <WrapperContentPopup onClick={() => handleClickNavigate("profile")}>
+        Thông tin người dùng
+      </WrapperContentPopup>
+      <WrapperContentPopup onClick={() => handleClickNavigate("order")}>
+        Đơn hàng của tôi
+      </WrapperContentPopup>
+      {user?.isAdmin && (
+        <WrapperContentPopup onClick={() => handleClickNavigate("admin")}>
+          Quản lý hệ thống
+        </WrapperContentPopup>
+      )}
+      <WrapperContentPopup onClick={() => handleClickNavigate("logout")}>
+        Đăng xuất
+      </WrapperContentPopup>
+    </div>
+  );
+
+  const handleClickNavigate = (type) => {
+    switch (type) {
+      case "profile":
+        navigate("/profile-user");
+        break;
+      case "admin":
+        navigate("/system/admin");
+        break;
+      case "order":
+        navigate("/my-order", {
+          state: {
+            id: user?.id,
+            token: user?.access_token,
+          },
+        });
+        break;
+      case "logout":
+        navigate("/sign-in");
+        handleLogout();
+        break;
+      default:
+        break;
+    }
+    setIsOpenPopup(false);
+  };
 
     return (
 
@@ -139,27 +157,27 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
 };
 
 const styles = {
-    logoCircle: {
-        backgroundColor: '#fff',
-        borderRadius: '50%',
-        width: '40px',
-        height: '40px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    logoSymbol: {
-        color: '#2cba4b',
-        fontSize: '20px',
-        fontWeight: 'bold',
-        fontFamily: 'Arial, sans-serif',
-    },
-    avatar: {
-        height: '30px',
-        width: '30px',
-        borderRadius: '50%',
-        objectFit: 'cover',
-    },
+  logoCircle: {
+    backgroundColor: "#fff",
+    borderRadius: "50%",
+    width: "40px",
+    height: "40px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  logoSymbol: {
+    color: "#2cba4b",
+    fontSize: "20px",
+    fontWeight: "bold",
+    fontFamily: "Arial, sans-serif",
+  },
+  avatar: {
+    height: "30px",
+    width: "30px",
+    borderRadius: "50%",
+    objectFit: "cover",
+  },
 };
 
 export default HeaderComponent;

@@ -473,7 +473,7 @@ const AdminProduct = () => {
                     form={form}
                 >
                     <Form.Item
-                        label="Name"
+                        label="Tên Sản Phẩm"
                         name="name"
                         rules={[{ required: true, message: 'Please input name product!' }]}
                     >
@@ -481,7 +481,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Type"
+                        label="Loại Sản Phẩm"
                         name="type"
                         rules={[{ required: true, message: 'Please input type product!' }]}
                     >
@@ -497,7 +497,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Price"
+                        label="Giá Sản Phẩm"
                         name="price"
                         rules={[{ required: true, message: 'Please input price product!' }]}
                     >
@@ -505,7 +505,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Count inStock"
+                        label="Số Lượng Sản Phẩm"
                         name="countInStock"
                         rules={[{ required: true, message: 'Please input count inStock product!' }]}
                     >
@@ -513,7 +513,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Rating"
+                        label="Dánh Giá"
                         name="rating"
                         rules={[{ required: true, message: 'Please input rating product!' }]}
                     >
@@ -521,7 +521,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Dicount"
+                        label="Giảm Giá"
                         name="discount"
                         rules={[{ required: false, message: 'Please input discount of product!' }]}
                     >
@@ -529,7 +529,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Description"
+                        label="Mô Tả Sản Phẩm"
                         name="description"
                         rules={[{ required: true, message: 'Please input description product!' }]}
                     >
@@ -537,7 +537,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Xuất xứ"
+                        label="Xuất Xứ"
                         name="origin"
                         rules={[{ required: true, message: 'Please input origin of product!' }]}
                     >
@@ -545,7 +545,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Công dụng"
+                        label="Công Dụng"
                         name="uses"
                         rules={[{ required: true, message: 'Please input uses of product!' }]}
                     >
@@ -553,7 +553,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Cảnh báo an toàn"
+                        label="Cảnh Báo An Toàn"
                         name="report"
                         rules={[{ required: true, message: 'Please input report product!' }]}
                     >
@@ -561,7 +561,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Bảo quản"
+                        label="Bảo Quản"
                         name="preserve"
                         rules={[{ required: true, message: 'Please input preserve!' }]}
                     >
@@ -569,7 +569,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Image"
+                        label="Hình Ảnh"
                         name="image"
                         rules={[{ required: true, message: 'Please input image product!' }]}
                     >
@@ -605,7 +605,7 @@ const AdminProduct = () => {
                     form={form}
                 >
                     <Form.Item
-                        label="Name"
+                        label="Tên Sản Phẩm"
                         name="name"
                         rules={[{ required: true, message: 'Please input name product!' }]}
                     >
@@ -613,7 +613,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Type"
+                        label="Loại Sản Phẩm"
                         name="type"
                         rules={[{ required: true, message: 'Please input type product!' }]}
                     >
@@ -621,7 +621,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Price"
+                        label="Giá Sản Phẩm"
                         name="price"
                         rules={[{ required: true, message: 'Please input price product!' }]}
                     >
@@ -629,7 +629,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Count inStock"
+                        label="Số Lượng Sản Phẩm"
                         name="countInStock"
                         rules={[{ required: true, message: 'Please input count inStock product!' }]}
                     >
@@ -637,7 +637,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Rating"
+                        label="Đánh Giá"
                         name="rating"
                         rules={[{ required: true, message: 'Please input rating product!' }]}
                     >
@@ -645,7 +645,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Discount"
+                        label="Giảm Giá"
                         name="discount"
                         rules={[{ required: false, message: 'Please input discount of product!' }]}
                     >
@@ -653,7 +653,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Description"
+                        label="Mô Tả Sản Phẩm"
                         name="description"
                         rules={[{ required: true, message: 'Please input description product!' }]}
                     >
@@ -661,7 +661,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Xuất xứ"
+                        label="Xuất Xứ"
                         name="origin"
                         rules={[{ required: true, message: 'Please input origin of product!' }]}
                     >
@@ -669,7 +669,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Công dụng"
+                        label="Công Dụng"
                         name="uses"
                         rules={[{ required: true, message: 'Please input uses of product!' }]}
                     >
@@ -677,7 +677,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Cảnh báo an toàn"
+                        label="Cảnh Báo An Toàn"
                         name="report"
                         rules={[{ required: true, message: 'Please input report product!' }]}
                     >
@@ -685,7 +685,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Bảo quản"
+                        label="Bảo Quản"
                         name="preserve"
                         rules={[{ required: true, message: 'Please input preserve!' }]}
                     >
@@ -693,7 +693,7 @@ const AdminProduct = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Image"
+                        label="Hình Ảnh"
                         name="image"
                         rules={[{ required: true, message: 'Please input image product!' }]}
                     >

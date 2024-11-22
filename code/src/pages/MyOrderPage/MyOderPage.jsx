@@ -79,7 +79,8 @@ const MyOrderPage = () => {
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
-                    marginLeft: '10px'
+                    marginLeft: '10px',
+                    fontSize:"20px"
                 }}>{order?.name}</div>
                 <span style={{ fontSize: '13px', color: '#242424', marginLeft: 'auto' }}>{convertPrice(order?.price)}</span>
             </WrapperHeaderItem>
@@ -89,26 +90,26 @@ const MyOrderPage = () => {
     return (
         <WrapperContainer>
             <div style={{ height: '100%', width: '100%', margin: '0 auto' }}>
-                <h4>Đơn hàng của tôi</h4>
+                <h4 style={{fontSize: '20px'}}>Đơn hàng của tôi</h4>
                 <WrapperListOrder>
                     {data?.map((order) => {
                         return (
                             <WrapperItemOrder key={order?._id}>
                                 <WrapperStatus>
-                                    <span style={{ fontSize: '14px', fontWeight: 'bold' }}>Trạng thái</span>
+                                    <span style={{ fontSize: '30px', fontWeight: 'bold' ,marginBottom:"10px",textAlign: "center"}}>Trạng thái</span>
                                     <div>
-                                        <span style={{ color: 'rgb(255, 66, 78)' }}>Giao hàng: </span>
-                                        <span style={{ color: 'rgb(90, 32, 193)', fontWeight: 'bold' }}>{`${order.isDelivered ? 'Đã giao hàng' : 'Chưa giao hàng'}`}</span>
+                                        <span style={{ color: 'rgb(255, 66, 78)',fontSize: '20px' }}>Giao hàng: </span>
+                                        <span style={{ color: 'rgb(90, 32, 193)', fontWeight: 'bold',fontSize: '15px' }}>{`${order.isDelivered ? 'Đã giao hàng' : 'Chưa giao hàng'}`}</span>
                                     </div>
                                     <div>
-                                        <span style={{ color: 'rgb(255, 66, 78)' }}>Thanh toán: </span>
-                                        <span style={{ color: 'rgb(90, 32, 193)', fontWeight: 'bold' }}>{`${order.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}`}</span>
+                                        <span style={{ color: 'rgb(255, 66, 78)' ,fontSize: '20px'}}>Thanh toán: </span>
+                                        <span style={{ color: 'rgb(90, 32, 193)', fontWeight: 'bold',fontSize: '15px' }}>{`${order.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}`}</span>
                                     </div>
                                 </WrapperStatus>
                                 {renderProduct(order?.orderItems)}
                                 <WrapperFooterItem>
                                     <div>
-                                        <span style={{ color: 'rgb(255, 66, 78)' }}>Tổng tiền: </span>
+                                        <span style={{ color: 'rgb(255, 66, 78)',fontSize: '20px' }}>Tổng tiền: </span>
                                         <span
                                             style={{ fontSize: '13px', color: 'rgb(56, 56, 61)', fontWeight: 700 }}
                                         >{convertPrice(order?.totalPrice)}</span>

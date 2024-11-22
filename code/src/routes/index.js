@@ -95,6 +95,11 @@ export const routes = [
         isShowHeader: false,
         isPrivate: true,
     },
+    {
+        path: '/formdk',
+        page: Form,
+        isShowHeader: true
+    },
 
     {
         path: '*',

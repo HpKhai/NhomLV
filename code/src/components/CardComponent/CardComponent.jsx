@@ -15,9 +15,7 @@ const CardComponent = (props) => {
     return (
         <WrapperCardStyle
             hoverable
-            headStyle={{ width: '200px', height: '200px' }}
-            style={{ width: 200 }}
-            bodyStyle={{ padding: '10px' }}
+            style={{ width: '200px' }}
             cover={<img alt="example" src={image} />}
             onClick={() => countInStock !== 0 && handleGetDetailsProduct(id)}  // Kiểm tra countInStock trước khi điều hướng
             disabled={countInStock === 0}  // Disabled khi sản phẩm hết hàng
@@ -29,6 +27,7 @@ const CardComponent = (props) => {
                 </span>
                 <WrapperStyleText> | Đã bán {selled || 100}+</WrapperStyleText>
             </WrapperReportText>
+            <h2>Teen cuar hang</h2>
             <WrapperPriceText>
                 <span style={{ marginRight: '10px' }}> {convertPrice(price)} </span>
                 <WrapperDiscountText>

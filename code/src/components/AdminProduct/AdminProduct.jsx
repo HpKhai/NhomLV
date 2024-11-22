@@ -300,7 +300,6 @@ const AdminProduct = () => {
         return { ...product, key: product._id }
     })
     const { data, isSuccess, isError } = mutation
-    console.log('s', data)
     const { data: dataUpdate, isSuccess: isSuccessUpdate, isError: isErrorUpdate } = mutationUpdate
     const { data: dataDelete, isSuccess: isSuccessDelete, isError: isErrorDelete } = mutationDelete
     const { data: dataDeleteMany, isSuccess: isSuccessDeleteMany, isError: isErrorDeleteMany } = mutationDeleteMany

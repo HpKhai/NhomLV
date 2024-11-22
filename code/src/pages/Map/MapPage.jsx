@@ -5,6 +5,7 @@ import L from 'leaflet';
 import 'leaflet-routing-machine';
 import customIconUrl from '../../components/Image/location-icon.png'
 import storeIconUrl from '../../components/Image/cua-hang.png'
+import { WrapperMap } from './Map';
 
 // Khởi tạo biểu tượng tùy chỉnh cho Marker
 const customIcon = new L.Icon({
@@ -77,54 +78,56 @@ const MapComponent = () => {
 
   return (
     <div>
-      <MapContainer
-        center={position}
-        zoom={13}
-        style={{ width: '100%', height: '600px' }}
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-
-        {/* Marker cho vị trí hiện tại */}
-        <Marker
-          position={position}
-          icon={storeIcon}
-          eventHandlers={{
-            click: () => handleMarkerClick(position), // Nhấp vào marker để chỉ đường
-          }}
+      <WrapperMap>
+        <MapContainer
+          center={position}
+          zoom={13}
+          style={{ width: '100%', height: '600px' }}
         >
-          <Popup>Cửa hàng NNX</Popup>
-        </Marker>
-
-        {/* Marker cho vị trí GPS của người dùng */}
-        {gpsPosition && (
-          <Marker position={gpsPosition} icon={customIcon}>
-            <Popup>Vị trí GPS của bạn</Popup>
-          </Marker>
-        )}
-
-        {/* Marker cho điểm đến */}
-        <Marker
-          position={[10.035, 105.785]} // Ví dụ về vị trí điểm đến
-          icon={storeIcon}
-          eventHandlers={{
-            click: () => handleMarkerClick([10.035, 105.785]), // Nhấp vào marker để chỉ đường
-          }}
-        >
-          <Popup>Cửa hàng NNX1</Popup>
-        </Marker>
-
-        {/* Thêm RoutingControl khi có điểm đến */}
-        {showRoute && destination && (
-          <RoutingControl
-            from={gpsPosition || position} // Nếu không có vị trí GPS, sử dụng vị trí mặc định
-            to={destination}
-            onRouteFound={(distance) => setDistance(distance)}
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
-        )}
-      </MapContainer>
+
+          {/* Marker cho vị trí hiện tại */}
+          <Marker
+            position={position}
+            icon={storeIcon}
+            eventHandlers={{
+              click: () => handleMarkerClick(position), // Nhấp vào marker để chỉ đường
+            }}
+          >
+            <Popup>Cửa hàng NNX</Popup>
+          </Marker>
+
+          {/* Marker cho vị trí GPS của người dùng */}
+          {gpsPosition && (
+            <Marker position={gpsPosition} icon={customIcon}>
+              <Popup>Vị trí GPS của bạn</Popup>
+            </Marker>
+          )}
+
+          {/* Marker cho điểm đến */}
+          <Marker
+            position={[10.035, 105.785]} // Ví dụ về vị trí điểm đến
+            icon={storeIcon}
+            eventHandlers={{
+              click: () => handleMarkerClick([10.035, 105.785]), // Nhấp vào marker để chỉ đường
+            }}
+          >
+            <Popup>Cửa hàng NNX1</Popup>
+          </Marker>
+
+          {/* Thêm RoutingControl khi có điểm đến */}
+          {showRoute && destination && (
+            <RoutingControl
+              from={gpsPosition || position} // Nếu không có vị trí GPS, sử dụng vị trí mặc định
+              to={destination}
+              onRouteFound={(distance) => setDistance(distance)}
+            />
+          )}
+        </MapContainer>
+      </WrapperMap>
 
       {distance && (
         <div

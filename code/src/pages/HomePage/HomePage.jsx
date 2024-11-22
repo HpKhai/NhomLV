@@ -53,12 +53,12 @@ const HomePage = () => {
       </div>
 
       <div className='body' style={{ width: '100%', backgroundColor: '#e7dee2' }}>
-        <div id="container" style={{ height: '1000px', width: '100%', margin: '0 auto' }}>
+        <div id="container" style={{ height: '100%', width: '100%' }}>
           <SliderComponent arrImages={[Baner1, Baner2, Baner3]} />
-          <div style={{ marginLeft: "120px", marginRight: "120px", display: "flex", justifyContent: "center" }}>
-            <WrapperProducts style={{ display: "flex", gap: "20px", flexWrap: "wrap", justifyContent: "space-between", width: "100%" }}>
+          <div style={{ margin: '0 auto', textAlign: 'center' }}>
+            <WrapperProducts style={{ margin: '0 auto', display: "flex", flexWrap: "wrap", justifyContent: 'center', gap: "20px", width: "90%" }}>
               {products?.data?.length > 0 ? products?.data?.map((product) => (
-                <CardComponent
+                <CardComponent style={{ width: '20%', height: '200px' }}
                   key={product._id}
                   countInStock={product.countInStock}
                   description={product.description}

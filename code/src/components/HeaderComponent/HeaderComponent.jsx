@@ -27,6 +27,8 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     const handleNavigateLogin = () => navigate('/sign-in');
     const handleNavigateHome = () => navigate('/');
     const handleNavigateMap = () => navigate('/map');
+    const handleNavigateDK = () => navigate('/FormDK-CH');
+
 
     const handleLogout = async () => {
         await UserService.logoutUser(user?.access_token);
@@ -34,7 +36,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     };
 
     const onSearch = (e) => {
-        dispatch(searchProduct(e.target.value));
+        dispatch(searchProduct(e.target.value))
     };
 
     const content = (
@@ -74,9 +76,11 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     };
 
     return (
+
         <div>
             <WrapperHeader style={{ justifyContent: isHiddenSearch && isHiddenCart ? 'space-between' : 'unset' }}>
                 <Col span={5} style={{ display: 'flex', alignItems: 'center' }}>
+                    <div onClick={handleNavigateDK}>aa</div>
                     <div onClick={handleNavigateHome} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                         <div style={styles.logoCircle}>
                             <span style={styles.logoSymbol}>N</span>

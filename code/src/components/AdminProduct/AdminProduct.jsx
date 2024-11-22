@@ -300,7 +300,6 @@ const AdminProduct = () => {
         return { ...product, key: product._id }
     })
     const { data, isSuccess, isError } = mutation
-    console.log('s', data)
     const { data: dataUpdate, isSuccess: isSuccessUpdate, isError: isErrorUpdate } = mutationUpdate
     const { data: dataDelete, isSuccess: isSuccessDelete, isError: isErrorDelete } = mutationDelete
     const { data: dataDeleteMany, isSuccess: isSuccessDeleteMany, isError: isErrorDeleteMany } = mutationDeleteMany
@@ -666,7 +665,7 @@ const AdminProduct = () => {
                         name="origin"
                         rules={[{ required: true, message: 'Please input origin of product!' }]}
                     >
-                        <InputComponents value={stateProductDetails.origin} onChange={handleOnChange} name="origin" />
+                        <InputComponents value={stateProductDetails.origin} onChange={handleOnChangeDetails} name="origin" />
                     </Form.Item>
 
                     <Form.Item
@@ -674,7 +673,7 @@ const AdminProduct = () => {
                         name="uses"
                         rules={[{ required: true, message: 'Please input uses of product!' }]}
                     >
-                        <InputComponents value={stateProductDetails.uses} onChange={handleOnChange} name="uses" />
+                        <InputComponents value={stateProductDetails.uses} onChange={handleOnChangeDetails} name="uses" />
                     </Form.Item>
 
                     <Form.Item
@@ -682,7 +681,7 @@ const AdminProduct = () => {
                         name="report"
                         rules={[{ required: true, message: 'Please input report product!' }]}
                     >
-                        <InputComponents value={stateProductDetails.report} onChange={handleOnChange} name="report" />
+                        <InputComponents value={stateProductDetails.report} onChange={handleOnChangeDetails} name="report" />
                     </Form.Item>
 
                     <Form.Item
@@ -690,7 +689,7 @@ const AdminProduct = () => {
                         name="preserve"
                         rules={[{ required: true, message: 'Please input preserve!' }]}
                     >
-                        <InputComponents value={stateProductDetails.preserve} onChange={handleOnChange} name="preserve" />
+                        <InputComponents value={stateProductDetails.preserve} onChange={handleOnChangeDetails} name="preserve" />
                     </Form.Item>
 
                     <Form.Item

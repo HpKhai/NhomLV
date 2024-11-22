@@ -5,6 +5,7 @@ const initialState = {
     orderItemsSelected: [],
     shippingAddress: {},
     paymentMethod: '',
+    shippingMethod: '',
     itemsPrice: 0,
     shippingPrice: 0,
     taxPrice: 0,
@@ -37,19 +38,19 @@ export const orderSlide = createSlice({
             const { idProduct } = action.payload;
             const itemOrder = state?.orderItems?.find((item) => item?.product === idProduct)
             const itemOrderSelected = state?.orderItemsSelected?.find((item) => item?.product === idProduct)
-                itemOrder.amount++;
-                if(itemOrderSelected){
-                    itemOrderSelected.amount++;
-                }
+            itemOrder.amount++;
+            if (itemOrderSelected) {
+                itemOrderSelected.amount++;
+            }
         },
         decreaseAmount: (state, action) => {
             const { idProduct } = action.payload;
             const itemOrder = state?.orderItems?.find((item) => item?.product === idProduct)
             const itemOrderSelected = state?.orderItemsSelected?.find((item) => item?.product === idProduct)
-                itemOrder.amount--;
-                if(itemOrderSelected){
-                    itemOrderSelected.amount--;
-                }
+            itemOrder.amount--;
+            if (itemOrderSelected) {
+                itemOrderSelected.amount--;
+            }
         },
         removeOrder: (state, action) => {
             const { idProduct } = action.payload;
@@ -57,7 +58,7 @@ export const orderSlide = createSlice({
             const itemOrderSelected = state?.orderItems?.filter((item) => item?.product !== idProduct);
 
             state.orderItems = itemOrder
-            if(itemOrderSelected){
+            if (itemOrderSelected) {
                 state.orderItemsSelected = itemOrder
             }
         },
@@ -67,15 +68,15 @@ export const orderSlide = createSlice({
             const itemOrderSelected = state?.orderItems?.filter((item) => !listCheck.includes(item.product));
 
             state.orderItems = itemOrders
-            if(itemOrderSelected){
+            if (itemOrderSelected) {
                 state.orderItemsSelected = itemOrders
             }
         },
         selectedOrder: (state, action) => {
             const { listCheck } = action.payload
             const orderSelected = []
-            state.orderItems.forEach((order)=>{
-                if(listCheck.includes(order.product)) {
+            state.orderItems.forEach((order) => {
+                if (listCheck.includes(order.product)) {
                     orderSelected.push(order)
                 }
             })

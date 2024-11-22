@@ -36,7 +36,9 @@ const DetailsOrderPage = () => {
   return (
     <div style={{ width: '100%', height: '100vh', background: '#f5f5fa' }}>
       <div style={{ width: '80%', margin: '0 auto', height: '100%' }}>
+
         <h4 style={{fontSize:"20px"}}>Chi tiết đơn hàng</h4>
+
         <WrapperHeaderUser>
           <WrapperInfoUser>
             <WrapperLabel>Địa chỉ người nhận</WrapperLabel>
@@ -49,7 +51,7 @@ const DetailsOrderPage = () => {
           <WrapperInfoUser>
             <WrapperLabel>Hình thức giao hàng</WrapperLabel>
             <WrapperContentInfo>
-              <div className='delivery-info'><span className='name-delivery'>FAST </span>Giao hàng tiết kiệm</div>
+              <div className='delivery-info'><span className='name-delivery'>{OrderContant.delivery[data?.shippingMethod]} </span>Giao hàng tiết kiệm</div>
               <div className='delivery-fee'><span>Phí giao hàng: </span> {data?.shippingPrice}</div>
             </WrapperContentInfo>
           </WrapperInfoUser>

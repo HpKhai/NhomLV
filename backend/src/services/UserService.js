@@ -3,11 +3,12 @@ const cookieParser =require ('cookie-parser')
 const User = require("../models/UserModel")
 const bcrypt = require("bcrypt")
 const { genneralAccessToken, genneralRefreshToken } = require("./JwtService")
+const { default: mongoose } = require('mongoose')
 
 
 const createUser = (newUser) => {
     return new Promise(async (resolve, reject) => {
-        const { name, email, password, confirmPassword, phone } = newUser
+        const { name, email, password, confirmPassword, phone, role } = newUser
         try {
             const checkUser = await User.findOne({name :name})
             if (checkUser !== null){
@@ -22,7 +23,8 @@ const createUser = (newUser) => {
                 email, 
                 password: hash, 
                 confirmPassword, 
-                phone   
+                phone   ,
+                role,
             })
             if (createdUser){
               resolve ({
@@ -65,11 +67,11 @@ const loginUser = async (userLogin) => {
             // Tạo token và trả về kết quả
             const access_token = await genneralAccessToken({
                 id: checkUser.id,
-                isAdmin: checkUser.isAdmin
+                role: checkUser.role
             });
             const refresh_token = await genneralRefreshToken({
                 id: checkUser.id,
-                isAdmin: checkUser.isAdmin
+                role: checkUser.role
             });
 
             resolve({
@@ -116,7 +118,7 @@ const deleteUser = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
             const checkUser = await User.findOne({
-                _id: id
+                _id: mongoose.Types.ObjectId(id)
             })
             if (checkUser === null){
                 resolve ({
@@ -139,7 +141,7 @@ const deleteUser = (id) => {
 const deleteManyUser = (ids) => {
     return new Promise(async (resolve, reject) => {
         try {
-            await User.deleteMany({_id:ids})
+            await User.deleteMany({_id:ids.map(id => mongoose.Types.ObjectId(id))})
             resolve ({
                 status : 'OK',
                 message: 'Delete user SUCCESS',
@@ -172,7 +174,7 @@ const getAllUser = (id) => {
 const getDetailsUser = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const user = await User.findOne({_id: id})
+            const user = await User.findOne({_id: mongoose.Types.ObjectId(id)})
             if (user === null){
                 resolve ({
                     status: 'ERR',

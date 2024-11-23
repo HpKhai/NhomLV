@@ -15,6 +15,7 @@ import PaymentPage from "../pages/PaymentPage/PaymentPage"
 import OrderSuccess from "../pages/OrderSuccess/OrderSuccess"
 import FormDKCH from "../pages/FormDKCH/Form"
 import { Form } from "antd"
+import ReteilerPages from "../pages/RetailerPages/RetailerPages"
 
 
 export const routes = [
@@ -88,6 +89,11 @@ export const routes = [
         page: AdminPage,
         isShowHeader: false,
         isPrivate: true,
+    },
+    {
+        path: '/system/retailer',
+        page: ReteilerPages,
+        isShowHeader: false,
     },
     {
         path: '/formdk',

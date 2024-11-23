@@ -52,9 +52,14 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
       <WrapperContentPopup onClick={() => handleClickNavigate("order")}>
         Đơn hàng của tôi
       </WrapperContentPopup>
-      {user?.isAdmin && (
+      {user?.role == "Admin" && (
         <WrapperContentPopup onClick={() => handleClickNavigate("admin")}>
           Quản lý hệ thống
+        </WrapperContentPopup>
+      )}
+      {user?.role == "Retailer" && (
+        <WrapperContentPopup onClick={() => handleClickNavigate("retailer")}>
+          Quản lý sản phẩm
         </WrapperContentPopup>
       )}
       <WrapperContentPopup onClick={() => handleClickNavigate("logout")}>
@@ -70,6 +75,9 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
         break;
       case "admin":
         navigate("/system/admin");
+        break;
+      case "retailer":
+        navigate("/system/retailer");
         break;
       case "order":
         navigate("/my-order", {

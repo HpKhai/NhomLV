@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose")
 const Order = require("../models/OrderModel")
 const Product = require("../models/ProductModel")
 const EmailService = require("../services/EmailService")
@@ -11,7 +12,7 @@ const createOrder = (newOrder) => {
             const promises = orderItems.map(async (order) => {
                 const productData = await Product.findOneAndUpdate(
                     {
-                        _id: order.product,
+                        _id: mongoose.Types.ObjectId(order.product),
                         countInStock: { $gte: order.amount }
                     },
                     {

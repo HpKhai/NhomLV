@@ -59,7 +59,7 @@ function App() {
     <Routes>
       {routes.map((route) => {
         const Page = route.page;
-        const ischeckAuth = !route.isPrivate || user.isAdmin;
+        const ischeckAuth = !route.isPrivate || user.role=="Admin";
         const Layout = route.isShowHeader ? DefaultComponent : Fragment;
         
         // Chỉ render Route khi ischeckAuth là true

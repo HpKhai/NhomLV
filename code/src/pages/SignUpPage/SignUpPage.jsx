@@ -14,6 +14,7 @@ import { useNavigate } from "react-router";
 import * as UserService from "../../service/UserService";
 import { useMutationHooks } from "../../hooks/useMutationHooks";
 import * as Message from "../../components/Message/Message";
+import { Input, Radio, Space } from "antd";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -28,8 +29,13 @@ const SignUpPage = () => {
       phone,
       password,
       confirmPassword,
+      role,
     });
     console.log("mutation", mutation);
+  };
+  const [role, setRole] = useState("User");
+  const onChange = (e) => {
+    setRole(e.target.value);
   };
   const { data, isLoading, isSuccess, isError } = mutation;
 
@@ -153,7 +159,12 @@ const SignUpPage = () => {
               onChange={handleOnchangeConfirmPassword}
             />
           </div>
-
+          <Radio.Group onChange={onChange} value={role}>
+            <Space direction="vertical">
+              <Radio value={"User"}>Khách Hàng</Radio>
+              <Radio value={"Retailer"}>Chủ Cửa Hàng</Radio>
+            </Space>
+          </Radio.Group>
           {data?.status === "ERR" && (
             <span style={{ color: "red" }}> {data?.message}</span>
           )}

@@ -25,6 +25,11 @@ export const routes = [
         isShowHeader: true
     },
     {
+        path: '/FormDK-CH',
+        page: FormPage,
+        isShowHeader: true
+    },
+    {
         path: '/order',
         page: OrderPage,
         isShowHeader: true

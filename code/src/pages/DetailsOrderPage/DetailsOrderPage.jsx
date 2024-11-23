@@ -113,6 +113,8 @@ const DetailsOrderPage = () => {
             <WrapperItemLabel>Tạm tính</WrapperItemLabel>
             <WrapperItemLabel>Phí vận chuyển</WrapperItemLabel>
             <WrapperItemLabel>Tổng cộng</WrapperItemLabel>
+
+
           </div>
           {data?.orderItems?.map((order) => {
             return (
@@ -155,6 +157,7 @@ const DetailsOrderPage = () => {
               </WrapperProduct>
             );
           })}
+
         </WrapperStyleContent>
       </div>
     </div>

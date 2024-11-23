@@ -14,6 +14,8 @@ import { updateUser } from "../../redux/slides/userSlide"
 import { useNavigate } from "react-router"
 import { removeAllOrder } from "../../redux/slides/orderSlide"
 import { PayPalButton } from "react-paypal-button-v2"
+import * as Message from '../../components/Message/Message'
+
 
 const PaymentPage = () => {
     const order = useSelector((state) => state.order)
@@ -142,7 +144,7 @@ const PaymentPage = () => {
                             arrayOrdered.push(element.product)
                         })
                         dispatch(removeAllOrder({ listCheck: arrayOrdered }))
-                        message.success("Đặt hàng thành công")
+                        Message.success("Đặt hàng thành công")
                         navigate('/ordersuccess', {
                             state: {
                                 delivery,
@@ -245,7 +247,7 @@ const PaymentPage = () => {
 
     return (
         <div className="container" style={{ background: '#f5f5fa', width: '100%', height: '100vh' }}>
-            <div style={{ height: '100%', width: '100%', margin: '0 auto' }}>
+            <div style={{ height: '100%', width: '80%', margin: '0 auto' }}>
                 <h2>Phương thức thanh toán</h2>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <WrapperLeft>

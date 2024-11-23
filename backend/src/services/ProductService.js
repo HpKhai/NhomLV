@@ -16,7 +16,6 @@ const createProduct = (newProduct) => {
                     message: 'The name of product is already'
                 })
             }
-
             const createdProduct = await Product.create({
                 name, image, type, price, countInStock, rating, description, discount, origin, uses, report, preserve
             })
@@ -27,7 +26,6 @@ const createProduct = (newProduct) => {
                     data: createdProduct
                 })
             }
-
         } catch (e) {
             reject(e)
         }
@@ -55,7 +53,6 @@ const updateProduct = (id, data) => {
         }
     });
 }
-
 
 const deleteProduct = (id) => {
     return new Promise(async (resolve, reject) => {

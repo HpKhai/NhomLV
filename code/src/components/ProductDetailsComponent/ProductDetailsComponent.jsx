@@ -51,7 +51,7 @@ const ProductDetailsComponent = ({ idProduct }) => {
     queryFn: () => fetchGetDetailsProduct(idProduct),
     enabled: !!idProduct,
   });
-
+  console.log('productDetails', productDetails)
   const handleAddOrderProduct = () => {
     if (!user?.id) {
       navigate("/sign-in", { state: location?.pathname });

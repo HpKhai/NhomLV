@@ -129,16 +129,15 @@ const HomePage = () => {
               styleButton={{
                 border: "1px solid rgb(11,116,229)",
                 background: "#fff",
-                color: `${
-                  products?.total === products?.data?.length
+                color: `${products?.total === products?.data?.length
                     ? "#ccc"
                     : "rgb(11,116,229)"
-                }`,
+                  }`,
                 width: "40%",
                 height: "38px",
                 borderRadius: "4px",
               }}
-              styleTextButton={{ fontWeight: 500 }}
+              styleTextButton={{ fontWeight: 500, color: 'blue' }}
               onClick={() => setLimit((prev) => prev + 6)}
               disabled={
                 products?.total === products?.data?.length ||

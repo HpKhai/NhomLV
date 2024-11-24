@@ -26,6 +26,7 @@ const AdminProduct = () => {
   const [typeSelect, setTypeSelect] = useState("");
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const user = useSelector((state) => state?.user);
+  console.log("user", user)
   // const [searchText, setSearchText] = useState('');
   // const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);

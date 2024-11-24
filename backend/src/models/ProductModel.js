@@ -14,8 +14,7 @@ const productSchema = new mongoose.Schema(
         origin: { type: String },
         report: { type: String },
         preserve: { type: String },
-
-
+        userName: { type: String },
     },
     {
         timestamps: true

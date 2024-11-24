@@ -318,35 +318,36 @@ const OrderPage = () => {
                 <div>
                     <Form
                         name="basic"
-                        labelCol={{ span: 4 }}
+                        labelCol={{ span: 6 }}
                         wrapperCol={{ span: 20 }}
                         autoComplete="on"
                         form={form}
                     >
 
                         <Form.Item
-                            label="Address"
+                            label="Địa chỉ"
                             name="address"
-                            rules={[{ required: true, message: 'Please input address user!' }]}
+                            rules={[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]}
                         >
                             <InputComponents value={stateUserDetails.address} onChange={handleOnChangeDetails} name="address" />
                         </Form.Item>
 
                         <Form.Item
-                            label="Phone"
+                            label="Thành phố"
+                            name="city"
+                            rules={[{ required: true, message: 'Vui lòng nhập thành phố!' }]}
+                        >
+                            <InputComponents value={stateUserDetails.city} onChange={handleOnChangeDetails} name="city" />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Số điện thoại"
                             name="phone"
-                            rules={[{ required: true, message: 'Please input phone user!' }]}
+                            rules={[{ required: true, message: 'Nhập số điện thoại nhận hàng!' }]}
                         >
                             <InputComponents value={stateUserDetails.phone} onChange={handleOnChangeDetails} name="phone" />
                         </Form.Item>
 
-                        <Form.Item
-                            label="City"
-                            name="city"
-                            rules={[{ required: true, message: 'Please input city of user!' }]}
-                        >
-                            <InputComponents value={stateUserDetails.city} onChange={handleOnChangeDetails} name="city" />
-                        </Form.Item>
 
                     </Form>
                 </div>

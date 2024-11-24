@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt")
 
 const createProduct = (newProduct) => {
     return new Promise(async (resolve, reject) => {
-        const { name, image, type, price, countInStock, rating, description, discount, origin, uses, report, preserve } = newProduct
+        const { name, image, type, price, countInStock, rating, description, discount, origin, uses, report, preserve, userName } = newProduct
         try {
             const checkProduct = await Product.findOne({
                 name: name
@@ -18,7 +18,7 @@ const createProduct = (newProduct) => {
             }
 
             const createdProduct = await Product.create({
-                name, image, type, price, countInStock, rating, description, discount, origin, uses, report, preserve
+                name, image, type, price, countInStock, rating, description, discount, origin, uses, report, preserve, userName
             })
             if (createdProduct) {
                 resolve({
@@ -165,6 +165,49 @@ const getAllProduct = (limit, page, sort, filter) => {
         }
     });
 }
+const getAllProductRetailer = (limit, page, sort, filter, userName) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const query = {}; // Tạo object để chứa các điều kiện tìm kiếm
+
+            // Nếu có `userName`, thêm điều kiện lọc theo `userName`
+            if (userName) {
+                query.userName = userName;
+            }
+
+            // Nếu có `filter`, thêm điều kiện lọc theo `filter`
+            if (filter) {
+                const label = filter[0];
+                query[label] = { '$regex': filter[1], '$options': 'i' }; // Regex không phân biệt chữ hoa/thường
+            }
+
+            const totalProduct = await Product.countDocuments(query); // Đếm tổng sản phẩm theo điều kiện
+
+            let productsQuery = Product.find(query).limit(limit).skip(page * limit);
+
+            // Nếu có `sort`, thêm điều kiện sắp xếp
+            if (sort) {
+                const objectSort = {};
+                objectSort[sort[1]] = sort[0];
+                productsQuery = productsQuery.sort(objectSort);
+            }
+
+            const products = await productsQuery; // Lấy dữ liệu sản phẩm
+
+            resolve({
+                status: 'OK',
+                message: 'SUCCESS',
+                data: products,
+                total: totalProduct,
+                pageCurrent: Number(page + 1), // Trang hiện tại, tính từ 1
+                totalPage: Math.ceil(totalProduct / limit)
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
 
 const getAllType = () => {
     return new Promise(async (resolve, reject) => {
@@ -192,6 +235,7 @@ module.exports = {
     getDetailsProduct,
     deleteProduct,
     getAllProduct,
+    getAllProductRetailer,
     deleteManyProduct,
     getAllType
 }

@@ -20,7 +20,6 @@ import { useMutationHooks } from "../../hooks/useMutationHooks";
 const MyOrderPage = () => {
   const location = useLocation();
   const { state } = location;
-  console.log("s", state);
   const navigate = useNavigate();
   const fetchMyOrder = async () => {
     const res = await OrderService.getOrderByUserId(state?.id, state?.token);
@@ -148,9 +147,8 @@ const MyOrderPage = () => {
                         fontWeight: "bold",
                         fontSize: "15px",
                       }}
-                    >{`${
-                      order.isDelivered ? "Đã giao hàng" : "Chưa giao hàng"
-                    }`}</span>
+                    >{`${order.isDelivered ? "Đã giao hàng" : "Chưa giao hàng"
+                      }`}</span>
                   </div>
                   <div>
                     <span
@@ -164,9 +162,8 @@ const MyOrderPage = () => {
                         fontWeight: "bold",
                         fontSize: "15px",
                       }}
-                    >{`${
-                      order.isPaid ? "Đã thanh toán" : "Chưa thanh toán"
-                    }`}</span>
+                    >{`${order.isPaid ? "Đã thanh toán" : "Chưa thanh toán"
+                      }`}</span>
                   </div>
                 </WrapperStatus>
                 {renderProduct(order?.orderItems)}

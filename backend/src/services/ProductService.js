@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt")
 
 const createProduct = (newProduct) => {
     return new Promise(async (resolve, reject) => {
-        const { name, image, type, price, countInStock, rating, description, discount, origin, uses, report, preserve, userName } = newProduct
+        const { name, image, type, price, countInStock, rating, description, discount, origin, uses, report, preserve, retailerName, retailerId } = newProduct
         try {
             const checkProduct = await Product.findOne({
                 name: name
@@ -18,7 +18,7 @@ const createProduct = (newProduct) => {
             }
 
             const createdProduct = await Product.create({
-                name, image, type, price, countInStock, rating, description, discount, origin, uses, report, preserve, userName
+                name, image, type, price, countInStock, rating, description, discount, origin, uses, report, preserve, retailerName, retailerId
             })
             if (createdProduct) {
                 resolve({
@@ -165,48 +165,56 @@ const getAllProduct = (limit, page, sort, filter) => {
         }
     });
 }
-const getAllProductRetailer = (limit, page, sort, filter, userName) => {
+
+const getAllProductRetailer = (limit, page, sort, filter, userId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const query = {}; // Tạo object để chứa các điều kiện tìm kiếm
+            console.log("User ID:", userId);
 
-            // Nếu có `userName`, thêm điều kiện lọc theo `userName`
-            if (userName) {
-                query.userName = userName;
-            }
+            // Tổng số sản phẩm
+            const totalProduct = await Product.countDocuments({ retailerId: userId });
 
-            // Nếu có `filter`, thêm điều kiện lọc theo `filter`
+            // Tạo truy vấn tìm kiếm sản phẩm
+            let query = { retailerId: userId };  // Chỉ lấy sản phẩm của nhà bán hàng hiện tại
+
+            // Thêm điều kiện lọc nếu có
             if (filter) {
                 const label = filter[0];
-                query[label] = { '$regex': filter[1], '$options': 'i' }; // Regex không phân biệt chữ hoa/thường
+                query[label] = { '$regex': filter[1], '$options': 'i' };  // Thêm tùy chọn 'i' cho regex (không phân biệt chữ hoa/thường)
             }
 
-            const totalProduct = await Product.countDocuments(query); // Đếm tổng sản phẩm theo điều kiện
+            // Truy vấn sản phẩm với lọc và sắp xếp (nếu có)
+            const productsQuery = Product.find(query)
+                .limit(limit)
+                .skip(page * limit);
 
-            let productsQuery = Product.find(query).limit(limit).skip(page * limit);
-
-            // Nếu có `sort`, thêm điều kiện sắp xếp
+            // Thêm điều kiện sắp xếp nếu có
             if (sort) {
                 const objectSort = {};
                 objectSort[sort[1]] = sort[0];
-                productsQuery = productsQuery.sort(objectSort);
+                productsQuery.sort(objectSort);
             }
 
-            const products = await productsQuery; // Lấy dữ liệu sản phẩm
+            // Lấy các sản phẩm đã lọc và sắp xếp
+            const allProduct = await productsQuery;
 
+            // Trả về dữ liệu
             resolve({
                 status: 'OK',
                 message: 'SUCCESS',
-                data: products,
+                data: allProduct,
                 total: totalProduct,
-                pageCurrent: Number(page + 1), // Trang hiện tại, tính từ 1
+                pageCurrent: Number(page + 1),   // Trang hiện tại, tính từ 1
                 totalPage: Math.ceil(totalProduct / limit)
             });
+
         } catch (e) {
             reject(e);
         }
     });
-};
+}
+
+
 
 
 const getAllType = () => {

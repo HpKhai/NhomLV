@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   PlusOutlined,
   DeleteOutlined,
-  EditOutlined,
+  EyeOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
 import TableComponent from "../TableComponent/TableComponent";
@@ -14,18 +14,25 @@ import { useQuery } from "@tanstack/react-query";
 import DrawerComponent from "../DrawerComponent/DrawerComponent";
 import { useSelector } from "react-redux";
 import ModalComponent from "../ModalComponent/ModalComponent";
-import * as Message from "../Message/Message";
+import * as Message from "../../components/Message/Message";
 import { WrapperHeader } from "./style";
 import { WrapperUploadFile } from "./style";
+import * as OrderService from "../../service/OrderService";
 import * as UserService from "../../service/UserService";
+import { useLocation, useNavigate } from "react-router";
 
-const AdminOrder = () => {
+
+const AdminUser = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
   const [form] = Form.useForm();
   const [rowSelected, setRowSelected] = useState("");
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+  const location = useLocation();
+  const { state } = location;
   const user = useSelector((state) => state?.user);
+  const navigate = useNavigate();
+
   // const [searchText, setSearchText] = useState('');
   // const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
@@ -56,15 +63,15 @@ const AdminOrder = () => {
     return res;
   });
 
-  const getAllUsers = async () => {
-    const res = await UserService.getAllUser();
+  const getAllOrders = async () => {
+    const res = await OrderService.getAllOrder();
     return res;
   };
   const queryUser = useQuery({
-    queryKey: ["user"],
-    queryFn: getAllUsers,
+    queryKey: ["order"],
+    queryFn: getAllOrders,
   });
-  const { data: users } = queryUser;
+  const { data: orders } = queryUser;
 
   const fetchGetDetailsUser = async (rowSelected) => {
     const res = await UserService.getDetailsUser(
@@ -93,11 +100,14 @@ const AdminOrder = () => {
     }
   }, [rowSelected]);
 
-  const handleDetailsUser = () => {
-    setIsOpenDrawer(true);
+  const handleDetailsOrder = (id) => {
+    navigate(`/details-order/${id}`, {
+      state: {
+        token: state?.token,
+      },
+    });
   };
-
-  const renderAction = () => {
+  const renderAction = (orders) => {
     return (
       <div>
         <DeleteOutlined
@@ -109,16 +119,17 @@ const AdminOrder = () => {
           }}
           onClick={() => setIsModalOpenDelete(true)}
         />
-        <EditOutlined
+        <EyeOutlined
           style={{
             color: "blue",
             fontSize: "16px",
             cursor: "pointer",
             margin: "5px",
           }}
-          onClick={handleDetailsUser}
+          onClick={() => handleDetailsOrder(orders._id)}
         />
       </div>
+
     );
   };
 
@@ -207,47 +218,42 @@ const AdminOrder = () => {
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      sorter: (a, b) => a.name.length - b.name.length,
-      ...getColumnSearchProps("name"),
+      title: "Mã Order",
+      dataIndex: "_id",
+      sorter: (a, b) => a._id.length - b._id.length,
+      ...getColumnSearchProps("_id"),
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      sorter: (a, b) => a.name.length - b.name.length,
-      ...getColumnSearchProps("email"),
+      title: "Người mua hàng",
+      dataIndex: "fullName",
+      sorter: (a, b) => a.fullName.length - b.fullName.length,
+      ...getColumnSearchProps("fullName"),
     },
     {
-      title: "role",
-      dataIndex: "role",
+      title: "Cửa hàng",
+      dataIndex: "retailerName",
+      ...getColumnSearchProps("retailerName"),
+
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      sorter: (a, b) => a.address.length - b.address.length,
-      ...getColumnSearchProps("address"),
-    },
-    {
-      title: "Phone",
-      dataIndex: "phone",
-      sorter: (a, b) => a.phone - b.phone,
-      ...getColumnSearchProps("phone"),
+      title: "Tổng tiền",
+      dataIndex: "totalPrice",
+      sorter: (a, b) => a.totalPrice.length - b.totalPrice.length,
     },
     {
       title: "Action",
       dataIndex: "action",
-      render: renderAction,
+      render: (_, record) => renderAction(record),
     },
   ];
 
   const dataTable =
-    users?.data?.length &&
-    users?.data?.map((user) => {
+    orders?.data?.length &&
+    orders?.data?.map((order) => {
+      console.log("order", order)
       return {
-        ...user,
-        key: user._id,
-        role: user?.role,
+        ...order,
+        fullName: order?.shippingAddress?.fullName,
       };
     });
   const {
@@ -407,102 +413,6 @@ const AdminOrder = () => {
           }}
         />
       </div>
-
-      <DrawerComponent
-        title="Chi tiết người dùng"
-        isOpen={isOpenDrawer}
-        onClose={() => setIsOpenDrawer(false)}
-        width="75%"
-      >
-        <Form
-          name="basic"
-          labelCol={{ span: 4 }}
-          wrapperCol={{ span: 20 }}
-          onFinish={onUpdateUser}
-          autoComplete="on"
-          form={form}
-        >
-          <Form.Item
-            label="Tên Người Dùng"
-            name="name"
-            rules={[{ message: "Please input name user!" }]}
-          >
-            <InputComponents
-              disabled
-              value={stateUserDetails.name}
-              onChange={handleOnChangeDetails}
-              name="name"
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[{ required: true, message: "Please input email user!" }]}
-          >
-            <InputComponents
-              value={stateUserDetails.email}
-              onChange={handleOnChangeDetails}
-              name="email"
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Địa Chỉ"
-            name="address"
-            rules={[{ required: true, message: "Please input address user!" }]}
-          >
-            <InputComponents
-              value={stateUserDetails.address}
-              onChange={handleOnChangeDetails}
-              name="address"
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="SĐT"
-            name="phone"
-            rules={[{ required: true, message: "Please input phone user!" }]}
-          >
-            <InputComponents
-              value={stateUserDetails.phone}
-              onChange={handleOnChangeDetails}
-              name="phone"
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Hình Ảnh"
-            name="image"
-            rules={[{ required: true, message: "Please input image product!" }]}
-          >
-            <WrapperUploadFile
-              onChange={handleOnchangeAvatarDetails}
-              maxCount={1}
-            >
-              <Button>Select File</Button>
-              {stateUserDetails?.avatar && (
-                <img
-                  src={stateUserDetails?.avatar}
-                  style={{
-                    height: "60px",
-                    width: "60px",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    marginLeft: "10px",
-                  }}
-                  alt="avatar"
-                />
-              )}
-            </WrapperUploadFile>
-          </Form.Item>
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      </DrawerComponent>
       <ModalComponent
         forceRender
         title="Xóa người dùng"
@@ -515,4 +425,4 @@ const AdminOrder = () => {
     </div>
   );
 };
-export default AdminOrder;
+export default AdminUser;

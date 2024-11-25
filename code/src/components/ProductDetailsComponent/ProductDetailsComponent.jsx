@@ -67,6 +67,8 @@ const ProductDetailsComponent = ({ idProduct }) => {
             product: productDetails?._id,
             dicount: productDetails?.discount,
             countInStock: productDetails?.countInStock,
+            retailerName: productDetails?.retailerName,
+            retailerId: productDetails?.retailerId,
           },
         })
       );
@@ -212,7 +214,7 @@ const ProductDetailsComponent = ({ idProduct }) => {
         <div style={{ width: "100%" }}>
           <span style={{ fontSize: "20px", display: "flex", marginBottom: '10px' }}>
             TÊN CỬA HÀNG
-            <div style={{ color: "green", marginLeft: '20px', fontWeight: '500' }}>{productDetails?.userName}</div>
+            <div style={{ color: "green", marginLeft: '20px', fontWeight: '500' }}>{productDetails?.retailerName}</div>
           </span>
           <span style={{ fontSize: "20px", display: "flex", borderTop: "2px solid #ccc", paddingTop: '15px' }}>
             ĐIỂM NỖI BẬC

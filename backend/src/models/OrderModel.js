@@ -11,6 +11,7 @@ const orderSchema = new mongoose.Schema({
                 ref: 'Product',
                 require: true,
             },
+
         },
     ],
     shippingAddress: {
@@ -25,6 +26,8 @@ const orderSchema = new mongoose.Schema({
     shippingPrice: { type: Number, require: true },
     totalPrice: { type: Number, require: true },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', require: true },
+    retailerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', require: true },
+    retailerName: { type: String, require: true },
     isPaid: { type: Boolean, default: false },
     paidAt: { type: Date },
     isDelivered: { type: Boolean, default: false },

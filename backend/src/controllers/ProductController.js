@@ -5,9 +5,11 @@ const ProductService = require('../services/ProductService');
 
 const createProduct = async (req, res) => {
     try {
-        console.log('req.body', req.body)
         const { name, image, type, price, countInStock, rating, description, discount
-            , origin, uses, report, preserve, userName } = req.body
+            , origin, uses, report, preserve, retailerName, retailerId } = req.body
+
+        console.log('req.bodysssssssssssssssssssss', req.body)
+
         if (!name) {
             return res.status(400).json({
                 status: 'ERR',
@@ -64,10 +66,21 @@ const createProduct = async (req, res) => {
                 status: 'ERR',
                 message: 'The input rating is required'
             })
-        } else if (!userName) {
+        } else if (!retailerName) {
             return res.status(400).json({
                 status: 'ERR',
-                message: 'The userName is required'
+                message: 'The retailerName is required'
+            })
+        } else if (!retailerId) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'The retailerId is required'
+            })
+        }
+        else if (!discount) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'The discount is required'
             })
         }
 
@@ -91,7 +104,6 @@ const updateProduct = async (req, res) => {
                 message: 'The ProductId is required'
             })
         }
-
         const response = await ProductService.updateProduct(ProductId, data)
         return res.status(201).json(response)
     } catch (e) {
@@ -182,23 +194,22 @@ const getAllProduct = async (req, res) => {
 }
 const getAllProductRetailer = async (req, res) => {
     try {
-        const { limit, page, sort, filter, userName } = req.query; // Lấy `userName` từ query params
+        const { limit, page, sort, filter, userId } = req.query
+        console.log("bbbbbbbbbbbbbbbbbbbbbbbbb", req.query)
         const response = await ProductService.getAllProductRetailer(
-            Number(limit) || 8,          // Giới hạn số lượng sản phẩm
-            Number(page) || 0,           // Trang hiện tại
-            sort,                        // Thông tin sắp xếp
-            filter,                      // Bộ lọc
-            userName                     // Thêm `userName` vào hàm gọi
-        );
-        return res.status(201).json(response);
+            Number(limit) || 8,
+            Number(page) || 0,
+            sort,
+            filter,
+            userId
+        )
+        return res.status(201).json(response)
     } catch (e) {
         return res.status(500).json({
-            status: 'ERROR',
-            message: e.message || 'Something went wrong'
-        });
+            message: e
+        })
     }
-};
-
+}
 const getAllType = async (req, res) => {
     try {
         const response = await ProductService.getAllType()

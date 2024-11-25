@@ -46,7 +46,8 @@ const RetailerProduct = () => {
     report: "",
     preserve: "",
     image: "",
-    userName: "",
+    retailerName: "",
+    retailerId: ""
   });
   const [stateProduct, setStateProduct] = useState(inittial());
   const [stateProductDetails, setStateProductDetails] = useState(inittial());
@@ -54,7 +55,8 @@ const RetailerProduct = () => {
   const mutation = useMutationHooks((data) => {
     const res = ProductService.createProduct({
       ...data,
-      userName: user.name,
+      retailerName: user?.name,
+      retailerId: user?.id,
     });
     return res;
   });
@@ -76,7 +78,7 @@ const RetailerProduct = () => {
   });
 
   const getAllProductRetailer = async () => {
-    const res = await ProductService.getAllProductRetailer(user.name, "", 100);
+    const res = await ProductService.getAllProductRetailer(user?.id, "", 100);
     return res;
   };
   const queryProduct = useQuery({
@@ -309,7 +311,6 @@ const RetailerProduct = () => {
       return { ...product, key: product._id };
     });
   const { data, isSuccess, isError } = mutation;
-  console.log("s", data);
   const {
     data: dataUpdate,
     isSuccess: isSuccessUpdate,

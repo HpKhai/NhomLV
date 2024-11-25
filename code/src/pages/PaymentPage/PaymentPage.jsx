@@ -23,7 +23,6 @@ const PaymentPage = () => {
     const [delivery, setDelivery] = useState('fast')
     const [sdkReady, setSdkReady] = useState(false)
     const navigate = useNavigate()
-
     const dispatch = useDispatch()
     const [stateUserDetails, setStateUserDetails] = useState({
         phone: '',
@@ -31,7 +30,6 @@ const PaymentPage = () => {
         city: ''
     })
     const [form] = Form.useForm()
-
 
     useEffect(() => {
         form.setFieldsValue(stateUserDetails)
@@ -118,6 +116,9 @@ const PaymentPage = () => {
             })
         }
     }
+    console.log('aaaaaaaaaaaaaaaaaaaaa', order?.orderItemsSelected[0]?.retailerName)
+    console.log('aaaaaaaaaaaaaaaaaaaaa', order?.orderItemsSelected[0]?.retailerId)
+
     const handleAddOrder = () => {
         if (payment && delivery) {
             mutationAddOrder.mutate(
@@ -133,7 +134,10 @@ const PaymentPage = () => {
                     itemsPrice: priceMemo,
                     shippingPrice: deliveryPrice,
                     totalPrice: totalPriceMemo,
-                    user: user?.id
+                    user: user?.id,
+                    email: user?.email,
+                    retailerName: order?.orderItemsSelected[0]?.retailerName,
+                    retailerId: order?.orderItemsSelected[0]?.retailerId
                 },
                 {
                     onSuccess: () => {
@@ -220,6 +224,8 @@ const PaymentPage = () => {
                 email: user?.email,
                 isPaid: true,
                 paidAt: details.update_time,
+                retailerName: order?.orderItemsSelected[0]?.retailerName,
+                retailerId: order?.orderItemsSelected[0]?.retailerId
             },
             {
                 onSuccess: () => {

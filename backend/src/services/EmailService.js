@@ -5,15 +5,12 @@ var inlineBase64 = require('nodemailer-plugin-inline-base64');
 
 const sendEmailCreateOrder = async (email, orderItems) => {
   let transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false, // true for 465, false for other ports
+    service: 'gmail',
     auth: {
-      user: 'adnongnghiepxanh@gmail.com', // generated ethereal user
-      pass: 'A123456A', // generated ethereal password
+      user: process.env.MAIL_ACCOUNT, // generated ethereal user
+      pass: process.env.MAIL_PASSWORD, // generated ethereal password
     },
   });
-  transporter.use('compile', inlineBase64({ cidPrefix: 'somePrefix_' }));
 
   let listItem = '';
   const attachImage = []

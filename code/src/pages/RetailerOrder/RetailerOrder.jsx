@@ -1,39 +1,102 @@
-import React, { useEffect } from "react";
-import Loading from "../../components/LoadingComponent/Loading";
-import { useQuery } from "@tanstack/react-query";
-import * as OrderService from "../../service/OrderService";
-import { useSelector } from "react-redux";
-import { convertPrice } from "../../utils";
+import React, { useEffect, useRef, useState } from "react";
 import {
-  WrapperItemOrder,
-  WrapperListOrder,
-  WrapperHeaderItem,
-  WrapperFooterItem,
-  WrapperContainer,
-  WrapperStatus,
-} from "./style";
-import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
-import { useLocation, useNavigate } from "react-router-dom";
-import * as Message from "../../components/Message/Message";
+  PlusOutlined,
+  DeleteOutlined,
+  EyeOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
+import { Button, Form, Space } from "antd";
+import { getBase64 } from "../../utils";
 import { useMutationHooks } from "../../hooks/useMutationHooks";
+import { useQuery } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
+import * as Message from "../../components/Message/Message";
+import { WrapperHeader } from "./style";
+import * as OrderService from "../../service/OrderService";
+import * as UserService from "../../service/UserService";
+import { useLocation, useNavigate } from "react-router";
+import InputComponents from "../../components/InputComponents/InputComponents";
+import TableComponent from "../../components/TableComponent/TableComponent";
+import ModalComponent from "../../components/ModalComponent/ModalComponent";
 
-const MyOrderPage = () => {
+
+const RetailerOrder = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
+  const [form] = Form.useForm();
+  const [rowSelected, setRowSelected] = useState("");
+  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const location = useLocation();
   const { state } = location;
-  console.log("s", state);
+  const user = useSelector((state) => state?.user);
   const navigate = useNavigate();
-  const fetchMyOrder = async () => {
-    const res = await OrderService.getOrderByUserId(state?.id, state?.token);
-    return res.data;
-  };
-  const user = useSelector((state) => state.user);
 
-  const queryOrder = useQuery({
-    queryKey: ["orders"],
-    queryFn: fetchMyOrder,
-    enabled: !!state?.id && !!state?.token,
+  // const [searchText, setSearchText] = useState('');
+  // const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
+
+  const [stateUserDetails, setStateUserDetails] = useState({
+    name: "",
+    email: "",
+    role: "User",
+    phone: "",
+    avatar: "",
+    address: "",
   });
-  const { isLoading, data } = queryOrder;
+
+  const mutationUpdate = useMutationHooks((data) => {
+    const { id, token, ...rests } = data;
+    const res = UserService.updateUser(id, { ...rests }, token);
+    return res;
+  });
+
+  const mutationDelete = useMutationHooks((data) => {
+    const { id, token } = data;
+    const res = UserService.deleteUser(id, token);
+    return res;
+  });
+  const mutationDeleteMany = useMutationHooks((data) => {
+    const { token, ...ids } = data;
+    const res = UserService.deleteManyUser(ids, token);
+    return res;
+  });
+
+  const getOrderRetailer = async () => {
+    const res = await OrderService.getOrderRetailer(user.id, user.access_token);
+    return res;
+  };
+  const queryUser = useQuery({
+    queryKey: ["order"],
+    queryFn: getOrderRetailer,
+  });
+  const { data: orders } = queryUser;
+
+  const fetchGetDetailsUser = async (rowSelected) => {
+    const res = await UserService.getDetailsUser(
+      rowSelected,
+      user.access_token
+    );
+    if (res?.data) {
+      setStateUserDetails({
+        name: res?.data?.name,
+        email: res?.data?.email,
+        role: res?.data?.role,
+        phone: res?.data?.phone,
+        avatar: res?.data?.avatar,
+        address: res?.data?.address,
+      });
+    }
+  };
+
+  useEffect(() => {
+    form.setFieldsValue(stateUserDetails);
+  }, [form, stateUserDetails]);
+
+  useEffect(() => {
+    if (rowSelected) {
+      fetchGetDetailsUser(rowSelected);
+    }
+  }, [rowSelected]);
 
   const handleDetailsOrder = (id) => {
     navigate(`/details-order/${id}`, {
@@ -42,190 +105,322 @@ const MyOrderPage = () => {
       },
     });
   };
+  const renderAction = (orders) => {
+    return (
+      <div>
+        <DeleteOutlined
+          style={{
+            color: "red",
+            fontSize: "16px",
+            cursor: "pointer",
+            margin: "5px",
+          }}
+          onClick={() => setIsModalOpenDelete(true)}
+        />
+        <EyeOutlined
+          style={{
+            color: "blue",
+            fontSize: "16px",
+            cursor: "pointer",
+            margin: "5px",
+          }}
+          onClick={() => handleDetailsOrder(orders._id)}
+        />
+      </div>
 
-  const mutation = useMutationHooks((data) => {
-    const { id, token, orderItems, userId } = data;
-    const res = OrderService.cancelOrder(id, token, orderItems, userId);
-    return res;
+    );
+  };
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <InputComponents
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={`${selectedKeys[0] || ""}`}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1890ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
   });
 
-  const handleCancelOrder = (order) => {
-    mutation.mutate(
+  const columns = [
+    {
+      title: "Mã Order",
+      dataIndex: "_id",
+      sorter: (a, b) => a._id.length - b._id.length,
+      ...getColumnSearchProps("_id"),
+    },
+    {
+      title: "Người mua hàng",
+      dataIndex: "fullName",
+      sorter: (a, b) => a.fullName.length - b.fullName.length,
+      ...getColumnSearchProps("fullName"),
+    },
+    {
+      title: "Cửa hàng",
+      dataIndex: "retailerName",
+      ...getColumnSearchProps("retailerName"),
+
+    },
+    {
+      title: "Tổng tiền",
+      dataIndex: "totalPrice",
+      sorter: (a, b) => a.totalPrice.length - b.totalPrice.length,
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: (_, record) => renderAction(record),
+    },
+  ];
+
+  const dataTable =
+    orders?.data?.length &&
+    orders?.data?.map((order) => {
+      console.log("order", order)
+      return {
+        ...order,
+        fullName: order?.shippingAddress?.fullName,
+      };
+    });
+  const {
+    data: dataUpdate,
+    isSuccess: isSuccessUpdate,
+    isError: isErrorUpdate,
+  } = mutationUpdate;
+  const {
+    data: dataDelete,
+    isSuccess: isSuccessDelete,
+    isError: isErrorDelete,
+  } = mutationDelete;
+  const {
+    data: dataDeleteMany,
+    isSuccess: isSuccessDeleteMany,
+    isError: isErrorDeleteMany,
+  } = mutationDeleteMany;
+
+  const handleCancelDelete = () => {
+    setIsModalOpenDelete(false);
+  };
+  const handleDeleteUser = () => {
+    mutationDelete.mutate(
+      { id: rowSelected, token: user?.access_token },
       {
-        id: order._id,
-        token: state?.token,
-        orderItems: order?.orderItems,
-        userId: user.id,
-      },
-      {
-        onSuccess: () => {
-          queryOrder.refetch();
+        onSettled: () => {
+          queryUser.refetch();
         },
       }
     );
   };
-  const {
-    isLoading: isLoadingCancel,
-    isSuccess: isSuccessCancel,
-    isError: isErrorCancle,
-    data: dataCancel,
-  } = mutation;
-
+  const handleDeleteManyUser = (ids) => {
+    mutationDeleteMany.mutate(
+      { ids: ids, token: user?.access_token },
+      {
+        onSettled: () => {
+          queryUser.refetch();
+        },
+      }
+    );
+  };
+  // const onFinish = () => {
+  //     mutation.mutate(stateUser, {
+  //         onSettled: () => {
+  //             queryUser.refetch()
+  //             handleCancel()
+  //         }
+  //     })
+  // }
+  // useEffect(() => {
+  //     if (isSuccess && data?.status === 'OK') {
+  //         handleCancel()
+  //         Message.success()
+  //     } else if (isError) {
+  //         Message.error()
+  //     }
+  // }, [isSuccess])
   useEffect(() => {
-    if (isSuccessCancel && dataCancel?.status === "OK") {
+    if (isSuccessUpdate && dataUpdate?.status === "OK") {
       Message.success();
-    } else if (isSuccessCancel && dataCancel?.status === "ERR") {
-      Message.error(dataCancel?.Message);
-    } else if (isErrorCancle) {
+    } else if (isErrorUpdate) {
       Message.error();
     }
-  }, [isErrorCancle, isSuccessCancel]);
+  }, [isSuccessUpdate]);
+  useEffect(() => {
+    if (isSuccessDelete && dataDelete?.status === "OK") {
+      handleCancelDelete();
+      Message.success();
+    } else if (isErrorDelete) {
+      Message.error();
+    }
+  }, [isSuccessDelete]);
+  useEffect(() => {
+    if (isSuccessDeleteMany && dataDeleteMany?.status === "OK") {
+      Message.success();
+    } else if (isErrorDeleteMany) {
+      Message.error();
+    }
+  }, [isSuccessDeleteMany]);
 
-  const renderProduct = (data) => {
-    return data?.map((order) => {
-      return (
-        <WrapperHeaderItem key={order?._id}>
-          <img
-            src={order?.image}
-            style={{
-              width: "70px",
-              height: "70px",
-              objectFit: "cover",
-              border: "1px solid rgb(238, 238, 238)",
-              padding: "2px",
-            }}
-          />
-          <div
-            style={{
-              width: "50%",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              marginLeft: "10px",
-              fontSize: "20px",
-            }}
-          >
-            {order?.name}
-          </div>
-          <span
-            style={{ fontSize: "13px", color: "#242424", marginLeft: "auto" }}
-          >
-            {convertPrice(order?.price)}
-          </span>
-        </WrapperHeaderItem>
-      );
-    });
+  const handleOnChangeDetails = (e) => {
+    setStateUserDetails((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
   };
-  console.log(data);
-  return (
-    <WrapperContainer>
-      <div style={{ height: "100%", width: "100%", margin: "0 auto" }}>
-        <h4 style={{ fontSize: "20px" }}>Đơn hàng của tôi</h4>
-        <WrapperListOrder>
-          {data?.map((order) => {
-            return (
-              <WrapperItemOrder key={order?._id}>
-                <WrapperStatus>
-                  <span
-                    style={{
-                      fontSize: "30px",
-                      fontWeight: "bold",
-                      marginBottom: "10px",
-                      textAlign: "center",
-                    }}
-                  >
-                    Trạng thái
-                  </span>
-                  <div>
-                    <span
-                      style={{ color: "rgb(255, 66, 78)", fontSize: "20px" }}
-                    >
-                      Giao hàng:{" "}
-                    </span>
-                    <span
-                      style={{
-                        color: "rgb(90, 32, 193)",
-                        fontWeight: "bold",
-                        fontSize: "15px",
-                      }}
-                    >{`${order.isDelivered ? "Đã giao hàng" : "Chưa giao hàng"
-                      }`}</span>
-                  </div>
-                  <div>
-                    <span
-                      style={{ color: "rgb(255, 66, 78)", fontSize: "20px" }}
-                    >
-                      Thanh toán:{" "}
-                    </span>
-                    <span
-                      style={{
-                        color: "rgb(90, 32, 193)",
-                        fontWeight: "bold",
-                        fontSize: "15px",
-                      }}
-                    >{`${order.isPaid ? "Đã thanh toán" : "Chưa thanh toán"
-                      }`}</span>
-                  </div>
-                </WrapperStatus>
-                {renderProduct(order?.orderItems)}
-                <WrapperFooterItem>
-                  <div>
-                    <span
-                      style={{ color: "rgb(255, 66, 78)", fontSize: "20px" }}
-                    >
-                      Tổng tiền:{" "}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: "13px",
-                        color: "rgb(56, 56, 61)",
-                        fontWeight: 700,
-                      }}
-                    >
-                      {convertPrice(order?.totalPrice)}
-                    </span>
-                  </div>
-                  <div style={{ display: "flex", gap: "10px" }}>
-                    <ButtonComponent
-                      onClick={() => handleCancelOrder(order)}
-                      size={40}
-                      styleButton={{
-                        padding: "10px 20px",
-                        backgroundColor: "red",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        fontSize: "16px",
-                        fontWeight: "bold",
-                      }}
-                      textButton={"Hủy đơn hàng"}
-                    ></ButtonComponent>
+  // const handleOnchangeAvatar = async ({ file }) => {
+  //     if (file && file.originFileObj) {
+  //         const base64 = await getBase64(file.originFileObj)
+  //         setStateUser(prevState => ({
+  //             ...prevState,
+  //             image: base64
+  //         }))
+  //     }
+  // };
 
-                    <ButtonComponent
-                      onClick={() => handleDetailsOrder(order?._id)}
-                      size={40}
-                      styleButton={{
-                        padding: "10px 20px",
-                        backgroundColor: "#61c148",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        fontSize: "16px",
-                        fontWeight: "bold",
-                      }}
-                      textButton={"Xem chi tiết"}
-                    ></ButtonComponent>
-                  </div>
-                </WrapperFooterItem>
-              </WrapperItemOrder>
-            );
-          })}
-        </WrapperListOrder>
+  const handleOnchangeAvatarDetails = async ({ fileList }) => {
+    const file = fileList[0];
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setStateUserDetails((prevState) => ({
+      ...prevState,
+      avatar: file.preview,
+    }));
+  };
+
+  const onUpdateUser = () => {
+    mutationUpdate.mutate(
+      { id: rowSelected, token: user?.access_token, ...stateUserDetails },
+      {
+        onSettled: () => {
+          queryUser.refetch();
+        },
+      }
+    );
+    setIsOpenDrawer(false);
+    setStateUserDetails({
+      name: "",
+      email: "",
+      address: "",
+      phone: "",
+      image: "",
+    });
+    form.resetFields();
+  };
+
+  return (
+    <div>
+      <WrapperHeader>Quản lý người dùng</WrapperHeader>
+      <div>
+        <Button
+          style={{
+            display: "none",
+            height: "50px",
+            width: "50px",
+            color: "blue",
+            backgroundColor: "white",
+            margin: "10px",
+          }}
+          onClick={() => setIsModalOpen(true)}
+        >
+          <PlusOutlined />
+        </Button>
       </div>
-    </WrapperContainer>
+      <div>
+        <TableComponent
+          handleDeleteMany={handleDeleteManyUser}
+          columns={columns}
+          data={dataTable}
+          onRow={(record) => {
+            return {
+              onClick: (event) => {
+                setRowSelected(record._id);
+              },
+            };
+          }}
+        />
+      </div>
+      <ModalComponent
+        forceRender
+        title="Xóa người dùng"
+        open={isModalOpenDelete}
+        onCancel={handleCancelDelete}
+        onOk={handleDeleteUser}
+      >
+        <div>{`Bạn có muốn xóa người dùng không?`}</div>
+      </ModalComponent>
+    </div>
   );
 };
-
-export default MyOrderPage;
+export default RetailerOrder;

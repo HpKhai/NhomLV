@@ -11,27 +11,24 @@ export const getAllProduct = async (search, limit) => {
     }
     return res.data
 }
-export const getAllProductRetailer = async (userName, search = "", limit = 100) => {
-    const params = new URLSearchParams();
+export const getAllProductRetailer = async (userId, search, limit) => {
+    console.log('aaaaaaa', userId)
+    let res = {};
+    const baseUrl = `${process.env.REACT_APP_API_URL}/product/get-all-retailer`;
 
-    // Thêm userName vào query nếu có
-    if (userName) {
-        params.append("userName", userName);
+    if (!userId) {
+        throw new Error("User ID is required");
     }
 
-    // Thêm điều kiện lọc nếu có search
     if (search?.length > 0) {
-        params.append("filter", "name");
-        params.append("search", search);
+        res = await axios.get(`${baseUrl}?userId=${userId}&filter=name&filter=${search}&limit=${limit}`);
+    } else {
+        res = await axios.get(`${baseUrl}?userId=${userId}&limit=${limit}`);
     }
 
-    // Luôn thêm giới hạn số lượng sản phẩm
-    params.append("limit", limit);
-
-    // Gọi API với query params
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all-retailer?${params.toString()}`);
     return res.data;
 };
+
 
 export const getProductType = async (type, page, limit) => {
     if (type) {

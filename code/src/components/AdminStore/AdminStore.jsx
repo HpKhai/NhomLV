@@ -1,7 +1,7 @@
 import { Button, Form, Space } from "antd";
-import { WrapperHeader,  } from "../AdminUser/style";
+import { WrapperHeader, } from "../AdminUser/style";
 import { useEffect, useRef, useState } from "react";
-import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined} from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import TableComponent from "../TableComponent/TableComponent";
 import { useMutationHooks } from "../../hooks/useMutationHooks";
 import * as StoreService from '../../service/StoreService'
@@ -27,7 +27,7 @@ const AdminStore = () => {
     const inittial = () => ({
         name: '',
         x: 0.1,
-        y:0.1
+        y: 0.1
     })
     const [stateStore, setStateStore] = useState(inittial())
     const [stateStoreDetails, setStateStoreDetails] = useState(inittial())
@@ -261,8 +261,8 @@ const AdminStore = () => {
         setIsModalOpen(false)
         setStateStore({
             name: '',
-            x:0.1,
-            y:0.1
+            x: 0.1,
+            y: 0.1
         })
         form.resetFields()
     }
@@ -324,7 +324,7 @@ const AdminStore = () => {
             [e.target.name]: e.target.value
         })
     }
-   
+
 
 
 
@@ -336,7 +336,7 @@ const AdminStore = () => {
         })
         setIsOpenDrawer(false)
     }
-   
+
 
     return (
         <div>
@@ -345,7 +345,7 @@ const AdminStore = () => {
                 <Button style={{ height: '50px', width: '50px', color: 'blue', backgroundColor: 'white', margin: '10px' }}
                     onClick={() => setIsModalOpen(true)}><PlusOutlined /></Button>
             </div>
-             <div>
+            <div>
                 <TableComponent handleDeleteMany={handleDeleteManyStores} columns={columns} data={dataTable} onRow={(record) => {
                     return {
                         onClick: event => {
@@ -354,7 +354,7 @@ const AdminStore = () => {
                     };
                 }} />
             </div>
-            
+
             <ModalComponent forceRender title="Tạo cửa hàng" open={isModalOpen} onCancel={handleCancel} footer=''  >
                 <Form
                     name="basic"

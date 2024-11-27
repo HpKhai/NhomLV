@@ -13,7 +13,7 @@ import AdminPage from "../pages/AdminPage/AdminPage"
 import MapPage from "../pages/Map/MapPage"
 import PaymentPage from "../pages/PaymentPage/PaymentPage"
 import OrderSuccess from "../pages/OrderSuccess/OrderSuccess"
-import FormDKCH from "../pages/FormDKCH/Form"
+import FormPage from "../pages/FormDKKH/FormPage"
 import { Form } from "antd"
 import ReteilerPages from "../pages/RetailerPages/RetailerPages"
 

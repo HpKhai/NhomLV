@@ -4,7 +4,6 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 const genneralAccessToken = async (payload) => {
-    console.log('payload', payload)
     const access_token = jwt.sign({
         ...payload
     }, process.env.ACCESS_TOKEN, { expiresIn: '7d' })
@@ -23,7 +22,6 @@ const refreshTokenJwtService = (token) => {
         try {
             jwt.verify(token, process.env.REFRESH_TOKEN, async (err, user) => {
                 if (err) {
-                    console.log('err', err)
                     resolve({
                         status: 'ERROR',
                         message: 'The authemtication'

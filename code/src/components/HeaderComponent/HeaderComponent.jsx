@@ -51,11 +51,13 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
   const content = (
     <div>
       <WrapperContentPopup onClick={() => handleClickNavigate("profile")}>
-        Thông tin người dùng
+        Thông tin tài khoản
       </WrapperContentPopup>
-      <WrapperContentPopup onClick={() => handleClickNavigate("order")}>
-        Đơn hàng của tôi
-      </WrapperContentPopup>
+      {user?.role == "User" && (
+        <WrapperContentPopup onClick={() => handleClickNavigate("order")}>
+          Đơn hàng của tôi
+        </WrapperContentPopup>
+      )}
       {user?.role == "Admin" && (
         <WrapperContentPopup onClick={() => handleClickNavigate("admin")}>
           Quản lý hệ thống

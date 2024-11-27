@@ -6,8 +6,9 @@ const EmailService = require("../services/EmailService")
 
 const createOrder = (newOrder) => {
     return new Promise(async (resolve, reject) => {
+
         const { orderItems, paymentMethod, shippingMethod, itemsPrice, shippingPrice, totalPrice, isPaid, paidAt,
-            fullName, address, city, phone, user, email } = newOrder
+            fullName, address, city, phone, user, email, retailerName, retailerId } = newOrder
         try {
             const promises = orderItems.map(async (order) => {
                 const productData = await Product.findOneAndUpdate(
@@ -19,10 +20,9 @@ const createOrder = (newOrder) => {
                         $inc: {
                             countInStock: -order.amount,
                             selled: +order.amount
-
                         }
                     },
-                    { new: true }
+                    { new: true, returnDocument: 'after' }
                 )
                 if (productData) {
                     const createdOrder = await Order.create({
@@ -41,9 +41,11 @@ const createOrder = (newOrder) => {
                         shippingPrice,
                         totalPrice,
                         user: user,
+                        retailerName,
+                        retailerId
                     })
                     if (createdOrder) {
-                        // await EmailService.sendEmailCreateOrder(email, orderItems)
+                        await EmailService.sendEmailCreateOrder(email, orderItems)
                         resolve({
                             status: 'OK',
                             message: 'success'
@@ -63,6 +65,29 @@ const createOrder = (newOrder) => {
     })
 }
 
+const getOrderRetailer = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const order = await Order.find({
+                retailerId: id
+            })
+            if (order === null) {
+                resolve({
+                    status: 'ERR',
+                    message: 'The order is not defined'
+                })
+            }
+            resolve({
+                status: 'OK',
+                message: ' SUCCESS',
+                data: order
+            })
+
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
 
 const getOrderDetails = (id) => {
     return new Promise(async (resolve, reject) => {
@@ -115,6 +140,7 @@ const getDetailsOrder = (id) => {
 const cancelOrderDetails = (id, data) => {
     return new Promise(async (resolve, reject) => {
         try {
+
             let order = []
             const promises = data.map(async (order) => {
                 const productData = await Product.findOneAndUpdate(
@@ -128,8 +154,9 @@ const cancelOrderDetails = (id, data) => {
                             selled: -order.amount
                         }
                     },
-                    { new: true }
+                    { new: true, returnDocument: 'after' }
                 )
+
                 if (productData) {
                     order = await Order.findByIdAndDelete(id)
                     if (order === null) {
@@ -138,6 +165,7 @@ const cancelOrderDetails = (id, data) => {
                             message: 'The order is not defined'
                         })
                     }
+
                 } else {
                     return {
                         status: 'OK',
@@ -166,25 +194,26 @@ const cancelOrderDetails = (id, data) => {
     })
 }
 
-// const getAllOrder = () => {
-//     return new Promise(async (resolve, reject) => {
-//         try {
-//             const allOrder = await Order.find().sort({ createdAt: -1, updatedAt: -1 })
-//             resolve({
-//                 status: 'OK',
-//                 message: 'Success',
-//                 data: allOrder
-//             })
-//         } catch (e) {
-//             reject(e)
-//         }
-//     })
-// }
+const getAllOrder = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const allOrder = await Order.find()
+            resolve({
+                status: 'OK',
+                message: 'Success',
+                data: allOrder
+            })
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
 
 module.exports = {
     createOrder,
     getOrderDetails,
     getDetailsOrder,
     cancelOrderDetails,
-    // getAllOrder
+    getAllOrder,
+    getOrderRetailer
 }

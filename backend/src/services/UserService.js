@@ -1,4 +1,4 @@
-const cookieParser =require ('cookie-parser')
+const cookieParser = require('cookie-parser')
 
 const User = require("../models/UserModel")
 const bcrypt = require("bcrypt")
@@ -10,9 +10,9 @@ const createUser = (newUser) => {
     return new Promise(async (resolve, reject) => {
         const { name, email, password, confirmPassword, phone, role } = newUser
         try {
-            const checkUser = await User.findOne({name :name})
-            if (checkUser !== null){
-                resolve ({
+            const checkUser = await User.findOne({ name: name })
+            if (checkUser !== null) {
+                resolve({
                     status: 'ERR',
                     message: 'The name is already'
                 })
@@ -20,21 +20,21 @@ const createUser = (newUser) => {
             const hash = bcrypt.hashSync(password, 10)
             const createdUser = await User.create({
                 name,
-                email, 
-                password: hash, 
-                confirmPassword, 
-                phone   ,
+                email,
+                password: hash,
+                confirmPassword,
+                phone,
                 role,
             })
-            if (createdUser){
-              resolve ({
-                status : 'OK',
-                message: 'SUCCESS',
-                data: createdUser
-              })  
+            if (createdUser) {
+                resolve({
+                    status: 'OK',
+                    message: 'SUCCESS',
+                    data: createdUser
+                })
             }
-            
-        }catch (e){
+
+        } catch (e) {
             reject(e)
         }
     })
@@ -49,18 +49,16 @@ const loginUser = async (userLogin) => {
             if (checkUser === null) {
                 return reject({
                     status: 'ERR',
-                    message: 'The user is not defined'
+                    message: 'Tài khoản chưa được tạo'
                 });
             }
-
             // Sử dụng await để so sánh mật khẩu
             const comparePassword = await bcrypt.compare(password, checkUser.password);
-            // console.log('comparePassword', comparePassword);
 
             if (!comparePassword) {
                 return reject({
                     status: 'ERR',
-                    message: 'The password or user is incorrect'
+                    message: 'Sai mật khẩu'
                 });
             }
 
@@ -76,7 +74,7 @@ const loginUser = async (userLogin) => {
 
             resolve({
                 status: 'OK',
-                message: 'SUCCESS',
+                message: 'Đăng nhập thành công',
                 access_token,
                 refresh_token
             });
@@ -95,20 +93,20 @@ const updateUser = (id, data) => {
     return new Promise(async (resolve, reject) => {
         try {
             const checkUser = await User.findOne({ id: id })
-            if (checkUser === null){
-                resolve ({
+            if (checkUser === null) {
+                resolve({
                     status: 'ERR',
                     message: 'The user is not defined'
                 })
             }
-            const updatedUser = await User.findByIdAndUpdate(id, data,{new: true})
-            resolve ({
-                status : 'OK',
+            const updatedUser = await User.findByIdAndUpdate(id, data, { new: true })
+            resolve({
+                status: 'OK',
                 message: 'SUCCESS',
-                data:updatedUser
-              })  
-            
-        }catch (e){
+                data: updatedUser
+            })
+
+        } catch (e) {
             reject(e)
         }
     })
@@ -120,20 +118,20 @@ const deleteUser = (id) => {
             const checkUser = await User.findOne({
                 _id: mongoose.Types.ObjectId(id)
             })
-            if (checkUser === null){
-                resolve ({
+            if (checkUser === null) {
+                resolve({
                     status: 'ERR',
                     message: 'The user is not defined'
                 })
             }
             await User.findByIdAndDelete(id)
-            resolve ({
-                status : 'OK',
+            resolve({
+                status: 'OK',
                 message: 'Delete user SUCCESS',
-               
-              })  
-            
-        }catch (e){
+
+            })
+
+        } catch (e) {
             reject(e)
         }
     })
@@ -141,14 +139,14 @@ const deleteUser = (id) => {
 const deleteManyUser = (ids) => {
     return new Promise(async (resolve, reject) => {
         try {
-            await User.deleteMany({_id:ids.map(id => mongoose.Types.ObjectId(id))})
-            resolve ({
-                status : 'OK',
+            await User.deleteMany({ _id: ids.map(id => mongoose.Types.ObjectId(id)) })
+            resolve({
+                status: 'OK',
                 message: 'Delete user SUCCESS',
-               
-              })  
-            
-        }catch (e){
+
+            })
+
+        } catch (e) {
             reject(e)
         }
     })
@@ -157,15 +155,15 @@ const deleteManyUser = (ids) => {
 
 const getAllUser = (id) => {
     return new Promise(async (resolve, reject) => {
-        try {      
-         const allUser =   await User.find()
-            resolve ({
-                status : 'OK',
+        try {
+            const allUser = await User.find()
+            resolve({
+                status: 'OK',
                 message: ' SUCCESS',
                 data: allUser
-              })  
-            
-        }catch (e){
+            })
+
+        } catch (e) {
             reject(e)
         }
     })
@@ -174,20 +172,20 @@ const getAllUser = (id) => {
 const getDetailsUser = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const user = await User.findOne({_id: mongoose.Types.ObjectId(id)})
-            if (user === null){
-                resolve ({
+            const user = await User.findOne({ _id: mongoose.Types.ObjectId(id) })
+            if (user === null) {
+                resolve({
                     status: 'ERR',
                     message: 'The user is not defined'
                 })
             }
-            resolve ({
-                status : 'OK',
+            resolve({
+                status: 'OK',
                 message: ' SUCCESS',
                 data: user
-              })  
-            
-        }catch (e){
+            })
+
+        } catch (e) {
             reject(e)
         }
     })

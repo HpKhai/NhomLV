@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router";
 import { addOrder } from "../../redux/slides/orderSlide";
 import { convertPrice } from "../../utils";
+import * as Message from "../../components/Message/Message";
 
 const ProductDetailsComponent = ({ idProduct }) => {
   const [numProduct, setNumProduct] = useState(1);
@@ -66,9 +67,12 @@ const ProductDetailsComponent = ({ idProduct }) => {
             product: productDetails?._id,
             dicount: productDetails?.discount,
             countInStock: productDetails?.countInStock,
+            retailerName: productDetails?.retailerName,
+            retailerId: productDetails?.retailerId,
           },
         })
       );
+      Message.success("Thêm sản phẩm vào giỏ hàng thành công!");
     }
   };
   return (
@@ -194,22 +198,7 @@ const ProductDetailsComponent = ({ idProduct }) => {
                 fontWeight: "bold",
               }}
               onClick={handleAddOrderProduct}
-              textButton={"Chọn mua"}
-            ></ButtonComponent>
-
-            <ButtonComponent
-              size={20}
-              styleButton={{
-                border: "2px solid green",
-                // backgroundColor: "rgb(97, 193, 72)",
-                width: "100%",
-                height: "50px", // Đảm bảo cả hai nút có cùng chiều rộng
-              }}
-              styleTextButton={{
-                color: "rgb(97, 193, 72)",
-                fontWeight: "bold",
-              }}
-              textButton={"Trả Góp"}
+              textButton={"Thêm vào giỏ hàng"}
             ></ButtonComponent>
           </div>
         </Col>
@@ -223,32 +212,33 @@ const ProductDetailsComponent = ({ idProduct }) => {
         }}
       >
         <div style={{ width: "100%" }}>
-          <span style={{ fontSize: "20px", display: "flex" }}>
-            {" "}
+          <span style={{ fontSize: "20px", display: "flex", marginBottom: '10px' }}>
+            TÊN CỬA HÀNG
+            <div style={{ color: "green", marginLeft: '20px', fontWeight: '500' }}>{productDetails?.retailerName}</div>
+          </span>
+          <span style={{ fontSize: "20px", display: "flex", borderTop: "2px solid #ccc", paddingTop: '15px' }}>
             ĐIỂM NỖI BẬC
           </span>
-          <span
-            style={{
-              fontSize: "300%",
-              display: "flex",
-              color: "blue",
-              justifyContent: "center",
-              marginBottom: "20px",
-              fontFamily: "self",
-            }}
-          >
+        </div>
+        <div style={{
+          fontSize: "300%",
+          display: "flex",
+          color: "blue",
+          justifyContent: "center",
+          marginBottom: "20px",
+          fontFamily: "self",
+        }}>
+          <span>
             {productDetails?.name}
           </span>
         </div>
 
         <div style={{ width: "100%", borderTop: "2px solid #ccc" }}>
-          <p style={{ color: "#FF8C00" }}>MÔ TẢ SẢN PHẨM: </p>
+          <p style={{ color: "#FF8C00", fontSize: "20px" }}>MÔ TẢ SẢN PHẨM: </p>
           <p style={{ fontSize: "20px" }}>{productDetails?.description}</p>
           <div style={{ textAlign: "center" }}>
             <Image
               style={{
-                marginTop: "0",
-                marginBottom: "0",
                 border: "1px solid #00FF00",
                 width: "300px",
                 borderRadius: "50%",

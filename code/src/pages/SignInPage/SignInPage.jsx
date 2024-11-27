@@ -42,9 +42,8 @@ const SignInPage = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
 
   const mutation = useMutationHooks((data) => UserService.loginUser(data));
-
-  const { data, isSuccess, isError } = mutation;
-
+  console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaa', mutation)
+  const { data, isSuccess, isError, error } = mutation;
   const handleSignIn = () => {
     mutation.mutate({
       name,
@@ -60,13 +59,14 @@ const SignInPage = () => {
   );
 
   useEffect(() => {
+
     if (isSuccess) {
       if (location?.state) {
         navigate(location?.state);
       } else {
         navigate("/");
       }
-      Message.success();
+      Message.success(data.message);
       localStorage.setItem("access_token", JSON.stringify(data?.access_token));
       if (data?.access_token) {
         const decoded = jwtDecode(data?.access_token);
@@ -75,9 +75,9 @@ const SignInPage = () => {
         }
       }
     } else if (isError) {
-      Message.error();
+      Message.error(error?.response?.data?.message?.message);
     }
-  }, [isSuccess, isError, data, data?.access_token, handleGetDetailsUser]);
+  }, [isSuccess, isError, data?.message, error?.response?.data?.message?.message, data?.access_token, handleGetDetailsUser]);
 
   return (
     <div

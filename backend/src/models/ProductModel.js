@@ -14,8 +14,8 @@ const productSchema = new mongoose.Schema(
         origin: { type: String },
         report: { type: String },
         preserve: { type: String },
-
-
+        retailerName: { type: String },
+        retailerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', require: true },
     },
     {
         timestamps: true

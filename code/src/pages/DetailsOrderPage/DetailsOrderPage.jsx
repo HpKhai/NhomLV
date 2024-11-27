@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  WrapperAllPrice,
   WrapperContentInfo,
   WrapperHeaderUser,
   WrapperInfoUser,
@@ -17,7 +16,6 @@ import { useQuery } from "@tanstack/react-query";
 import { OrderContant } from "../../contant";
 import { convertPrice } from "../../utils";
 import { useMemo } from "react";
-import Loading from "../../components/LoadingComponent/Loading";
 
 const DetailsOrderPage = () => {
   const params = useParams();
@@ -36,7 +34,6 @@ const DetailsOrderPage = () => {
     enabled: !!id,
   });
   const { data } = queryOrder;
-  console.log("da", data);
   const priceMemo = useMemo(() => {
     const result = data?.orderItems?.reduce((total, cur) => {
       return total + cur.price * cur.amount;

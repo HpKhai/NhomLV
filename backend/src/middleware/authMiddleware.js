@@ -21,7 +21,7 @@ const authMiddleware = (req, res, next) => {
             });
         }
 
-        if (user?.role=="Admin") {
+        if (user?.role == "Admin" || user?.role == "Retailer") {
             next()
         } else {
             return res.status(403).json({
@@ -52,7 +52,7 @@ const authUserMiddleware = (req, res, next) => {
             });
         }
 
-        if (user?.role=="Admin" || user?.id === userId) {
+        if (user?.role == "Admin" || user?.role == "Retailer" || user?.id === userId) {
             next();
         } else {
             return res.status(403).json({

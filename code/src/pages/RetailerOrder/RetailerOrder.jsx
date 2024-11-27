@@ -4,16 +4,15 @@ import {
   DeleteOutlined,
   EyeOutlined,
   SearchOutlined,
+  CheckOutlined
 } from "@ant-design/icons";
 import { Button, Form, Space } from "antd";
-import { getBase64 } from "../../utils";
 import { useMutationHooks } from "../../hooks/useMutationHooks";
 import { useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import * as Message from "../../components/Message/Message";
 import { WrapperHeader } from "./style";
 import * as OrderService from "../../service/OrderService";
-import * as UserService from "../../service/UserService";
 import { useLocation, useNavigate } from "react-router";
 import InputComponents from "../../components/InputComponents/InputComponents";
 import TableComponent from "../../components/TableComponent/TableComponent";
@@ -23,43 +22,30 @@ import ModalComponent from "../../components/ModalComponent/ModalComponent";
 const RetailerOrder = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
-  const [form] = Form.useForm();
   const [rowSelected, setRowSelected] = useState("");
-  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const location = useLocation();
   const { state } = location;
   const user = useSelector((state) => state?.user);
   const navigate = useNavigate();
 
-  // const [searchText, setSearchText] = useState('');
-  // const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
 
-  const [stateUserDetails, setStateUserDetails] = useState({
-    name: "",
-    email: "",
-    role: "User",
-    phone: "",
-    avatar: "",
-    address: "",
-  });
-
-  const mutationUpdate = useMutationHooks((data) => {
-    const { id, token, ...rests } = data;
-    const res = UserService.updateUser(id, { ...rests }, token);
-    return res;
-  });
+  // const mutationUpdate = useMutationHooks((data) => {
+  //   const { id, token, ...rests } = data;
+  //   const res = UserService.updateUser(id, { ...rests }, token);
+  //   return res;
+  // });
 
   const mutationDelete = useMutationHooks((data) => {
-    const { id, token } = data;
-    const res = UserService.deleteUser(id, token);
+    const { id, token, orderItems, userId } = data;
+    const res = OrderService.cancelOrder(id, token, orderItems, userId);
     return res;
   });
-  const mutationDeleteMany = useMutationHooks((data) => {
-    const { token, ...ids } = data;
-    const res = UserService.deleteManyUser(ids, token);
-    return res;
-  });
+  // const mutationDeleteMany = useMutationHooks((data) => {
+  //   const { token, ...ids } = data;
+  //   const res = UserService.deleteManyUser(ids, token);
+  //   return res;
+  // });
 
   const getOrderRetailer = async () => {
     const res = await OrderService.getOrderRetailer(user.id, user.access_token);
@@ -71,32 +57,33 @@ const RetailerOrder = () => {
   });
   const { data: orders } = queryUser;
 
-  const fetchGetDetailsUser = async (rowSelected) => {
-    const res = await UserService.getDetailsUser(
-      rowSelected,
-      user.access_token
-    );
-    if (res?.data) {
-      setStateUserDetails({
-        name: res?.data?.name,
-        email: res?.data?.email,
-        role: res?.data?.role,
-        phone: res?.data?.phone,
-        avatar: res?.data?.avatar,
-        address: res?.data?.address,
-      });
-    }
-  };
 
-  useEffect(() => {
-    form.setFieldsValue(stateUserDetails);
-  }, [form, stateUserDetails]);
+  // const fetchGetDetailsUser = async (rowSelected) => {
+  //   const res = await UserService.getDetailsUser(
+  //     rowSelected,
+  //     user.access_token
+  //   );
+  //   if (res?.data) {
+  //     setStateUserDetails({
+  //       name: res?.data?.name,
+  //       email: res?.data?.email,
+  //       role: res?.data?.role,
+  //       phone: res?.data?.phone,
+  //       avatar: res?.data?.avatar,
+  //       address: res?.data?.address,
+  //     });
+  //   }
+  // };
 
-  useEffect(() => {
-    if (rowSelected) {
-      fetchGetDetailsUser(rowSelected);
-    }
-  }, [rowSelected]);
+  // useEffect(() => {
+  //   form.setFieldsValue(stateUserDetails);
+  // }, [form, stateUserDetails]);
+
+  // useEffect(() => {
+  //   if (rowSelected) {
+  //     fetchGetDetailsUser(rowSelected);
+  //   }
+  // }, [rowSelected]);
 
   const handleDetailsOrder = (id) => {
     navigate(`/details-order/${id}`, {
@@ -108,6 +95,15 @@ const RetailerOrder = () => {
   const renderAction = (orders) => {
     return (
       <div>
+        <CheckOutlined
+          style={{
+            color: "green",
+            fontSize: "16px",
+            cursor: "pointer",
+            margin: "5px",
+          }}
+        // onClick={() => handleCancelOrder(orders)}
+        />
         <DeleteOutlined
           style={{
             color: "red",
@@ -254,45 +250,54 @@ const RetailerOrder = () => {
         fullName: order?.shippingAddress?.fullName,
       };
     });
-  const {
-    data: dataUpdate,
-    isSuccess: isSuccessUpdate,
-    isError: isErrorUpdate,
-  } = mutationUpdate;
+  // const {
+  //   data: dataUpdate,
+  //   isSuccess: isSuccessUpdate,
+  //   isError: isErrorUpdate,
+  // } = mutationUpdate;
+
   const {
     data: dataDelete,
     isSuccess: isSuccessDelete,
     isError: isErrorDelete,
   } = mutationDelete;
-  const {
-    data: dataDeleteMany,
-    isSuccess: isSuccessDeleteMany,
-    isError: isErrorDeleteMany,
-  } = mutationDeleteMany;
+
+  // const {
+  //   data: dataDeleteMany,
+  //   isSuccess: isSuccessDeleteMany,
+  //   isError: isErrorDeleteMany,
+  // } = mutationDeleteMany;
+
+  const handleCancelOrder = (orders) => {
+    mutationDelete.mutate(
+      {
+        id: orders._id,
+        token: user.access_token,
+        orderItems: orders?.orderItems,
+        userId: user.id,
+      },
+      {
+        onSuccess: () => {
+          queryUser.refetch();
+        },
+      }
+    );
+  };
 
   const handleCancelDelete = () => {
     setIsModalOpenDelete(false);
   };
-  const handleDeleteUser = () => {
-    mutationDelete.mutate(
-      { id: rowSelected, token: user?.access_token },
-      {
-        onSettled: () => {
-          queryUser.refetch();
-        },
-      }
-    );
-  };
-  const handleDeleteManyUser = (ids) => {
-    mutationDeleteMany.mutate(
-      { ids: ids, token: user?.access_token },
-      {
-        onSettled: () => {
-          queryUser.refetch();
-        },
-      }
-    );
-  };
+
+  // const handleDeleteManyUser = (ids) => {
+  //   mutationDeleteMany.mutate(
+  //     { ids: ids, token: user?.access_token },
+  //     {
+  //       onSettled: () => {
+  //         queryUser.refetch();
+  //       },
+  //     }
+  //   );
+  // };
   // const onFinish = () => {
   //     mutation.mutate(stateUser, {
   //         onSettled: () => {
@@ -309,13 +314,13 @@ const RetailerOrder = () => {
   //         Message.error()
   //     }
   // }, [isSuccess])
-  useEffect(() => {
-    if (isSuccessUpdate && dataUpdate?.status === "OK") {
-      Message.success();
-    } else if (isErrorUpdate) {
-      Message.error();
-    }
-  }, [isSuccessUpdate]);
+  // useEffect(() => {
+  //   if (isSuccessUpdate && dataUpdate?.status === "OK") {
+  //     Message.success();
+  //   } else if (isErrorUpdate) {
+  //     Message.error();
+  //   }
+  // }, [isSuccessUpdate]);
   useEffect(() => {
     if (isSuccessDelete && dataDelete?.status === "OK") {
       handleCancelDelete();
@@ -324,64 +329,17 @@ const RetailerOrder = () => {
       Message.error();
     }
   }, [isSuccessDelete]);
-  useEffect(() => {
-    if (isSuccessDeleteMany && dataDeleteMany?.status === "OK") {
-      Message.success();
-    } else if (isErrorDeleteMany) {
-      Message.error();
-    }
-  }, [isSuccessDeleteMany]);
-
-  const handleOnChangeDetails = (e) => {
-    setStateUserDetails((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
-  // const handleOnchangeAvatar = async ({ file }) => {
-  //     if (file && file.originFileObj) {
-  //         const base64 = await getBase64(file.originFileObj)
-  //         setStateUser(prevState => ({
-  //             ...prevState,
-  //             image: base64
-  //         }))
-  //     }
-  // };
-
-  const handleOnchangeAvatarDetails = async ({ fileList }) => {
-    const file = fileList[0];
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setStateUserDetails((prevState) => ({
-      ...prevState,
-      avatar: file.preview,
-    }));
-  };
-
-  const onUpdateUser = () => {
-    mutationUpdate.mutate(
-      { id: rowSelected, token: user?.access_token, ...stateUserDetails },
-      {
-        onSettled: () => {
-          queryUser.refetch();
-        },
-      }
-    );
-    setIsOpenDrawer(false);
-    setStateUserDetails({
-      name: "",
-      email: "",
-      address: "",
-      phone: "",
-      image: "",
-    });
-    form.resetFields();
-  };
+  // useEffect(() => {
+  //   if (isSuccessDeleteMany && dataDeleteMany?.status === "OK") {
+  //     Message.success();
+  //   } else if (isErrorDeleteMany) {
+  //     Message.error();
+  //   }
+  // }, [isSuccessDeleteMany]);
 
   return (
     <div>
-      <WrapperHeader>Quản lý người dùng</WrapperHeader>
+      <WrapperHeader>Quản lý đơn hàng</WrapperHeader>
       <div>
         <Button
           style={{
@@ -399,28 +357,30 @@ const RetailerOrder = () => {
       </div>
       <div>
         <TableComponent
-          handleDeleteMany={handleDeleteManyUser}
+          // handleDeleteMany={handleDeleteManyUser}
           columns={columns}
           data={dataTable}
           onRow={(record) => {
             return {
               onClick: (event) => {
-                setRowSelected(record._id);
+                setRowSelected(record);
               },
             };
           }}
         />
       </div>
       <ModalComponent
-        forceRender
+        forceRenders
         title="Xóa người dùng"
         open={isModalOpenDelete}
         onCancel={handleCancelDelete}
-        onOk={handleDeleteUser}
+        // onOk={handleCancelOrder}
+        onOk={() => handleCancelOrder(rowSelected)}
       >
-        <div>{`Bạn có muốn xóa người dùng không?`}</div>
+        <div>{`Bạn có muốn xóa đơn hàng này không?`}</div>
       </ModalComponent>
     </div>
+
   );
 };
 export default RetailerOrder;

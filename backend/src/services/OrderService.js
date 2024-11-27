@@ -6,6 +6,7 @@ const EmailService = require("../services/EmailService")
 
 const createOrder = (newOrder) => {
     return new Promise(async (resolve, reject) => {
+
         const { orderItems, paymentMethod, shippingMethod, itemsPrice, shippingPrice, totalPrice, isPaid, paidAt,
             fullName, address, city, phone, user, email, retailerName, retailerId } = newOrder
         try {
@@ -19,10 +20,9 @@ const createOrder = (newOrder) => {
                         $inc: {
                             countInStock: -order.amount,
                             selled: +order.amount
-
                         }
                     },
-                    { new: true }
+                    { new: true, returnDocument: 'after' }
                 )
                 if (productData) {
                     const createdOrder = await Order.create({
@@ -140,6 +140,7 @@ const getDetailsOrder = (id) => {
 const cancelOrderDetails = (id, data) => {
     return new Promise(async (resolve, reject) => {
         try {
+
             let order = []
             const promises = data.map(async (order) => {
                 const productData = await Product.findOneAndUpdate(
@@ -153,8 +154,9 @@ const cancelOrderDetails = (id, data) => {
                             selled: -order.amount
                         }
                     },
-                    { new: true }
+                    { new: true, returnDocument: 'after' }
                 )
+
                 if (productData) {
                     order = await Order.findByIdAndDelete(id)
                     if (order === null) {
@@ -163,6 +165,7 @@ const cancelOrderDetails = (id, data) => {
                             message: 'The order is not defined'
                         })
                     }
+
                 } else {
                     return {
                         status: 'OK',

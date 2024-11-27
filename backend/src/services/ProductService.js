@@ -169,8 +169,6 @@ const getAllProduct = (limit, page, sort, filter) => {
 const getAllProductRetailer = (limit, page, sort, filter, userId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log("User ID:", userId);
-
             // Tổng số sản phẩm
             const totalProduct = await Product.countDocuments({ retailerId: userId });
 

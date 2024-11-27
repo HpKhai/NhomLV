@@ -3,10 +3,10 @@ const JwtService = require('../services/JwtService')
 const OrderService = require('../services/OrderService')
 
 const createOrder = async (req, res) => {
-
     try {
         const { paymentMethod, shippingMethod, itemsPrice, shippingPrice, totalPrice, fullName,
-            address, city, phone } = req.body
+            address, city, phone, retailerName, retailerId } = req.body
+
         if (!paymentMethod || !shippingMethod || !itemsPrice || !shippingPrice
             || !totalPrice || !fullName || !address || !city || !phone || !retailerName || !retailerId) {
             return res.status(200).json({
@@ -91,12 +91,14 @@ const cancelOrderDetails = async (req, res) => {
     try {
         const data = req.body.orderItems
         const orderId = req.body.orderId
+
         if (!orderId) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The orderId is required'
             })
         }
+
         const response = await OrderService.cancelOrderDetails(orderId, data)
         return res.status(200).json(response)
     } catch (e) {

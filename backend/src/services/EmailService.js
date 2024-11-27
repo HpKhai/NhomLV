@@ -22,12 +22,11 @@ const sendEmailCreateOrder = async (email, orderItems) => {
     </div>`
     attachImage.push({ path: order.image })
   })
-
   // send mail with defined transport object
   let info = await transporter.sendMail({
     from: process.env.MAIL_ACCOUNT, // sender address
-    to: 'adnongnghiepxanh@gmail.com', // list of receivers
-    subject: "Bạn đã đặt hàng tại shop LẬP trình thật dễ", // Subject line
+    to: email, // list of receivers
+    subject: "Bạn đã đặt hàng tại shop Nông Nghiệp Xanh", // Subject line
     text: "Hello world?", // plain text body
     html: `<div><b>Bạn đã đặt hàng thành công tại Nông Nghiệp Xanh</b></div> ${listItem}`,
     attachments: attachImage,

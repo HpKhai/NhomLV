@@ -32,7 +32,7 @@ const MyOrderPage = () => {
     queryFn: fetchMyOrder,
     enabled: !!state?.id && !!state?.token,
   });
-  const { isLoading, data } = queryOrder;
+  const { data } = queryOrder;
 
   const handleDetailsOrder = (id) => {
     navigate(`/details-order/${id}`, {

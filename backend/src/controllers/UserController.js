@@ -50,7 +50,7 @@ const loginUser = async (req, res) => {
         if (!name || !password) {
             return res.status(200).json({
                 status: 'ERR',
-                message: 'The input is required'
+                message: 'Nhập đầy đủ Mật Khẩu & Tài Khoản'
             })
         }
         // else if (!isCheckName) {
@@ -188,7 +188,7 @@ const refreshToken = async (req, res) => {
 }
 
 
-const logoutUser = (req,res) => {
+const logoutUser = (req, res) => {
 
     try {
         // Xóa cookie 'refresh_token'
@@ -197,8 +197,8 @@ const logoutUser = (req,res) => {
         // Trả về phản hồi thành công
         return res.status(200).json({
 
-            status:'OK',
-            message:'Logout SUCCESS'
+            status: 'OK',
+            message: 'Logout SUCCESS'
         });
     } catch (e) {
         // Trả về lỗi nếu có vấn đề

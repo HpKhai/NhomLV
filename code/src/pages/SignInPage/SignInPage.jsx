@@ -42,7 +42,6 @@ const SignInPage = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
 
   const mutation = useMutationHooks((data) => UserService.loginUser(data));
-  console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaa', mutation)
   const { data, isSuccess, isError, error } = mutation;
   const handleSignIn = () => {
     mutation.mutate({
@@ -59,7 +58,6 @@ const SignInPage = () => {
   );
 
   useEffect(() => {
-
     if (isSuccess) {
       if (location?.state) {
         navigate(location?.state);
@@ -86,13 +84,13 @@ const SignInPage = () => {
         alignItems: "center",
         justifyContent: "center",
         background: "#ccc",
-        height: "100vh",
+        height: "85vh",
       }}
     >
       <div
         style={{
           width: "800px",
-          height: "445px",
+          height: "470px",
           borderRadius: "6px",
           background: "#fff",
           display: "flex",

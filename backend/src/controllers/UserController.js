@@ -1,35 +1,43 @@
 const cookieParser = require('cookie-parser')
 const JwtService = require('../services/JwtService')
 const UserService = require('../services/UserService')
+const User = require("../models/UserModel")
+
 
 const createUser = async (req, res) => {
     try {
-        const { name, email, phone, password, confirmPassword } = req.body
+        const { name, email, phone, password, confirmPassword, role } = req.body
         const regemail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         const regname = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]+$/
 
         const isCheckEmail = regemail.test(email)
         const isCheckName = regname.test(name)
 
-        if (!name || !email || !phone || !password || !confirmPassword) {
-            return res.status(200).json({
+        const checkUser = await User.findOne({ name: name })
+        if (!name || !email || !phone || !password || !confirmPassword || !role) {
+            return res.status(400).json({
                 status: 'ERR',
                 message: 'The input is required'
             })
         } else if (!isCheckEmail) {
-            return res.status(200).json({
+            return res.status(400).json({
                 status: 'ERR',
-                message: 'The input is email'
+                message: 'Nhập đúng định dạng gmail'
             })
         } else if (!isCheckName) {
-            return res.status(200).json({
+            return res.status(400).json({
                 status: 'ERR',
-                message: 'A string containing uppercase letters, lowercase letters and numbers.'
+                message: 'Tài phải khoản chứa chữ hoa, số'
             })
         } else if (password !== confirmPassword) {
-            return res.status(200).json({
+            return res.status(400).json({
                 status: 'ERR',
-                message: 'The password is equal confirmPassword'
+                message: 'Mật khẩu không trùng khớp'
+            })
+        } else if (checkUser !== null) {
+            return res.status(409).json({
+                status: 'ERR',
+                message: 'Tài khoản đã tồn tại'
             })
         }
         const response = await UserService.createUser(req.body)
@@ -39,8 +47,9 @@ const createUser = async (req, res) => {
             message: e
         })
     }
-
 }
+
+
 
 const loginUser = async (req, res) => {
     try {
@@ -94,7 +103,6 @@ const updateUser = async (req, res) => {
             message: e
         })
     }
-
 }
 
 const deleteUser = async (req, res) => {

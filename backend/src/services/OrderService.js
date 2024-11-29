@@ -65,6 +65,60 @@ const createOrder = (newOrder) => {
     })
 }
 
+const updateOrder = (id, data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const order = await Order.findById(id);
+            if (!order) {
+                return resolve({
+                    status: 'ERR',
+                    message: 'The order is not defined'
+                });
+            }
+
+            const productData = await Order.findOneAndUpdate(
+                {
+                    _id: order._id, // Điều kiện tìm sản phẩm theo ID
+                    isPaid: false      // Chỉ cập nhật nếu isPaid hiện tại là false
+                },
+                {
+                    isPaid: true       // Thay đổi isPaid thành true
+                },
+                {
+                    new: true,         // Trả về tài liệu sau khi cập nhật
+                    returnDocument: 'after'
+                }
+            );
+
+            if (!productData) {
+                return resolve({
+                    status: 'ERR',
+                    message: 'Product not found or already updated'
+                });
+            }
+
+            // Cập nhật thông tin đơn hàng
+            const updatedOrder = await Order.findByIdAndUpdate(
+                id,
+                data,
+                { new: true } // Trả về tài liệu sau khi cập nhật
+            );
+            resolve({
+                status: 'OK',
+                message: 'Update successful',
+                data: updatedOrder
+            });
+        } catch (e) {
+            reject({
+                status: 'ERR',
+                message: 'An error occurred during update',
+                error: e.message
+            });
+        }
+    });
+};
+
+
 const getOrderRetailer = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -146,19 +200,20 @@ const cancelOrderDetails = (id, data) => {
                 const productData = await Product.findOneAndUpdate(
                     {
                         _id: order.product,
-                        selled: { $gte: order.amount }
+                        isPaid: false
                     },
                     {
-                        $inc: {
-                            countInStock: +order.amount,
-                            selled: -order.amount
-                        }
+                        isPaid: true
                     },
-                    { new: true, returnDocument: 'after' }
+                    {
+                        new: true,
+                        returnDocument: 'after'
+                    }
                 )
 
+
                 if (productData) {
-                    order = await Order.findByIdAndDelete(id)
+                    order = await Order.findByIdAndUpdate(id)
                     if (order === null) {
                         resolve({
                             status: 'ERR',
@@ -215,5 +270,6 @@ module.exports = {
     getDetailsOrder,
     cancelOrderDetails,
     getAllOrder,
-    getOrderRetailer
+    getOrderRetailer,
+    updateOrder
 }

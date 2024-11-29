@@ -13,8 +13,6 @@ import AdminPage from "../pages/AdminPage/AdminPage"
 import MapPage from "../pages/Map/MapPage"
 import PaymentPage from "../pages/PaymentPage/PaymentPage"
 import OrderSuccess from "../pages/OrderSuccess/OrderSuccess"
-import FormPage from "../pages/FormDKKH/FormPage"
-import { Form } from "antd"
 import ReteilerPages from "../pages/RetailerPages/RetailerPages"
 
 
@@ -22,11 +20,6 @@ export const routes = [
     {
         path: '/',
         page: HomePage,
-        isShowHeader: true
-    },
-    {
-        path: '/FormDK-CH',
-        page: FormPage,
         isShowHeader: true
     },
     {
@@ -100,12 +93,6 @@ export const routes = [
         page: ReteilerPages,
         isShowHeader: false,
     },
-    {
-        path: '/formdk',
-        page: Form,
-        isShowHeader: true
-    },
-
     {
         path: '*',
         page: NotFoundPage

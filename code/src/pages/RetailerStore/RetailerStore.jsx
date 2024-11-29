@@ -241,7 +241,6 @@ const RetailerStore = () => {
       return { ...Store, key: Store._id };
     });
   const { data, isSuccess, isError } = mutation;
-  console.log("s", data);
   const {
     data: dataUpdate,
     isSuccess: isSuccessUpdate,

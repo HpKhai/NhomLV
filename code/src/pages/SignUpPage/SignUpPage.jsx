@@ -6,22 +6,19 @@ import {
 } from "../SignInPage/style";
 import InputForm from "../../InputForm/InputForm";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
-import imageLogo from "../../assets/images/4.jpg";
-import { Image } from "antd";
 import { EyeFilled, EyeInvisibleFilled } from "@ant-design/icons";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import * as UserService from "../../service/UserService";
 import { useMutationHooks } from "../../hooks/useMutationHooks";
 import * as Message from "../../components/Message/Message";
-import { Input, Radio, Space } from "antd";
+import { Input, Radio, Space, message } from "antd";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
   const handleNavigateSignIn = () => {
-    navigate("/sign-in");
-  };
-  const mutation = useMutationHooks((data) => UserService.createUser(data));
+    navigate("/sign-in")
+  }
   const handleSignUp = () => {
     mutation.mutate({
       name,
@@ -30,23 +27,27 @@ const SignUpPage = () => {
       password,
       confirmPassword,
       role,
-    });
-    console.log("mutation", mutation);
-  };
-  const [role, setRole] = useState("User");
+    })
+  }
+  const mutation = useMutationHooks((data) => UserService.createUser(data))
+  const { data, isSuccess, isError } = mutation
+  const [role, setRole] = useState("User")
   const onChange = (e) => {
-    setRole(e.target.value);
+    setRole(e.target.value)
   };
-  const { data, isLoading, isSuccess, isError } = mutation;
-
+  console.log('murrrrrrrrrr', mutation)
   useEffect(() => {
     if (isError) {
-      Message.error();
-    } else if (isSuccess) {
-      Message.success();
-      handleNavigateSignIn();
+      Message.error(mutation?.error?.response?.data?.message)
     }
-  }, [isSuccess, isError]);
+    else if (isError) {
+      Message.error(message.message)
+    }
+    else if (isSuccess) {
+      navigate("/sign-in");
+      Message.success('Đăng ký thành công');
+    }
+  }, [isSuccess, isError, mutation?.error?.response?.data?.message])
 
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
@@ -80,13 +81,13 @@ const SignUpPage = () => {
         alignItems: "center",
         justifyContent: "center",
         background: "#ccc",
-        height: "100vh",
+        height: "85vh",
       }}
     >
       <div
         style={{
           width: "800px",
-          height: "445px",
+          height: "470px",
           borderRadius: "6px",
           background: "#fff",
           display: "flex",
@@ -186,7 +187,7 @@ const SignUpPage = () => {
             styleTextButton={{ color: "#blue" }}
             textButton={"Đăng Ký"}
           ></ButtonComponent>
-          <p style={{ fontSize: "15px" }}>
+          <p style={{ fontSize: "15px", marginTop: '5px' }}>
             {" "}
             Bạn đã có tài khoản{" "}
             <WrapperTextLight onClick={handleNavigateSignIn}>

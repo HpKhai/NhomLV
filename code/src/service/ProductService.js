@@ -12,7 +12,6 @@ export const getAllProduct = async (search, limit) => {
     return res.data
 }
 export const getAllProductRetailer = async (userId, search, limit) => {
-    console.log('aaaaaaa', userId)
     let res = {};
     const baseUrl = `${process.env.REACT_APP_API_URL}/product/get-all-retailer`;
 

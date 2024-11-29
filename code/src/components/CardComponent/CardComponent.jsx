@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router'
 import { convertPrice } from '../../utils'
 
 const CardComponent = (props) => {
-    const { countInStock, description, image, name, price, rating, type, selled, discount, id } = props
+    const { countInStock, image, name, price, rating, selled, discount, id, retailerName } = props
     const navigate = useNavigate()
 
     const handleGetDetailsProduct = (id) => {
         navigate(`/product-details/${id}`)
     }
-
+    console.log(retailerName)
     return (
         <WrapperCardStyle
             hoverable
@@ -27,7 +27,7 @@ const CardComponent = (props) => {
                 </span>
                 <WrapperStyleText> | Đã bán {selled || 100}+</WrapperStyleText>
             </WrapperReportText>
-            <h2>Teen cuar hang</h2>
+            <h2>{retailerName}</h2>
             <WrapperPriceText>
                 <span style={{ marginRight: '10px' }}> {convertPrice(price)} </span>
                 <WrapperDiscountText>

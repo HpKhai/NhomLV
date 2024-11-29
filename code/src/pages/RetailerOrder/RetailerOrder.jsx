@@ -22,6 +22,8 @@ import ModalComponent from "../../components/ModalComponent/ModalComponent";
 const RetailerOrder = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
+  const [isModalOpenSubmit, setIsModalOpenSubmit] = useState(false);
+
   const [rowSelected, setRowSelected] = useState("");
   const location = useLocation();
   const { state } = location;
@@ -30,12 +32,11 @@ const RetailerOrder = () => {
 
   const searchInput = useRef(null);
 
-  // const mutationUpdate = useMutationHooks((data) => {
-  //   const { id, token, ...rests } = data;
-  //   const res = UserService.updateUser(id, { ...rests }, token);
-  //   return res;
-  // });
-
+  const mutationUpdate = useMutationHooks((data) => {
+    const { id, token, order } = data;
+    const res = OrderService.updateOrder(id, order, token);
+    return res;
+  });
   const mutationDelete = useMutationHooks((data) => {
     const { id, token, orderItems, userId } = data;
     const res = OrderService.cancelOrder(id, token, orderItems, userId);
@@ -97,12 +98,16 @@ const RetailerOrder = () => {
       <div>
         <CheckOutlined
           style={{
-            color: "green",
+            color: orders.isPaid ? "gray" : "green", // Nếu isPaid là true, đổi màu thành gray
             fontSize: "16px",
-            cursor: "pointer",
+            cursor: orders.isPaid ? "not-allowed" : "pointer", // Đổi cursor nếu isPaid
             margin: "5px",
           }}
-        // onClick={() => handleCancelOrder(orders)}
+          onClick={() => {
+            if (!orders.isPaid) { // Chỉ mở modal nếu isPaid là false
+              setIsModalOpenSubmit(true);
+            }
+          }}
         />
         <DeleteOutlined
           style={{
@@ -244,17 +249,16 @@ const RetailerOrder = () => {
   const dataTable =
     orders?.data?.length &&
     orders?.data?.map((order) => {
-      console.log("order", order)
       return {
         ...order,
         fullName: order?.shippingAddress?.fullName,
       };
     });
-  // const {
-  //   data: dataUpdate,
-  //   isSuccess: isSuccessUpdate,
-  //   isError: isErrorUpdate,
-  // } = mutationUpdate;
+  const {
+    data: dataUpdate,
+    isSuccess: isSuccessUpdate,
+    isError: isErrorUpdate,
+  } = mutationUpdate;
 
   const {
     data: dataDelete,
@@ -283,9 +287,24 @@ const RetailerOrder = () => {
       }
     );
   };
+  const handleSubmitOrder = (orders) => {
+    mutationUpdate.mutate(
+      {
+        id: orders._id,
+        token: user.access_token,
+        order: orders
+      },
+      {
+        onSuccess: () => {
+          queryUser.refetch();
+        },
+      }
+    );
+  };
 
   const handleCancelDelete = () => {
     setIsModalOpenDelete(false);
+    setIsModalOpenSubmit(false)
   };
 
   // const handleDeleteManyUser = (ids) => {
@@ -314,13 +333,14 @@ const RetailerOrder = () => {
   //         Message.error()
   //     }
   // }, [isSuccess])
-  // useEffect(() => {
-  //   if (isSuccessUpdate && dataUpdate?.status === "OK") {
-  //     Message.success();
-  //   } else if (isErrorUpdate) {
-  //     Message.error();
-  //   }
-  // }, [isSuccessUpdate]);
+  useEffect(() => {
+    if (isSuccessUpdate && dataUpdate?.status === "OK") {
+      handleCancelDelete();
+      Message.success('Đơn hàng đã hoàn thành');
+    } else if (isErrorUpdate) {
+      Message.error();
+    }
+  }, [isSuccessUpdate]);
   useEffect(() => {
     if (isSuccessDelete && dataDelete?.status === "OK") {
       handleCancelDelete();
@@ -371,14 +391,23 @@ const RetailerOrder = () => {
       </div>
       <ModalComponent
         forceRenders
+        title="Hoàn thành đơn hàng"
+        open={isModalOpenSubmit}
+        onCancel={handleCancelDelete}
+        onOk={() => handleSubmitOrder(rowSelected)}
+      >
+        <div>{`Hoàn thành giao hàng!`}</div>
+      </ModalComponent>
+      <ModalComponent
+        forceRenders
         title="Xóa người dùng"
         open={isModalOpenDelete}
         onCancel={handleCancelDelete}
-        // onOk={handleCancelOrder}
         onOk={() => handleCancelOrder(rowSelected)}
       >
         <div>{`Bạn có muốn xóa đơn hàng này không?`}</div>
       </ModalComponent>
+
     </div>
 
   );

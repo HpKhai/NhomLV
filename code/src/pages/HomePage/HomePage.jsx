@@ -75,16 +75,17 @@ const HomePage = () => {
                   selled={product.selled}
                   discount={product.discount}
                   id={product._id}
+                  retailerName={product.retailerName}
                 />
-              )) :<h2
-                  style={{
-                    fontSize: "30px",
-                    color: " green",
-                    display: "flex",
-                  }}
-                >
-                  Không Tìm Thấy Sản Phẩm
-                </h2>}
+              )) : <h2
+                style={{
+                  fontSize: "30px",
+                  color: " green",
+                  display: "flex",
+                }}
+              >
+                Không Tìm Thấy Sản Phẩm
+              </h2>}
 
             </WrapperProducts>
           </div>
@@ -105,8 +106,8 @@ const HomePage = () => {
                 border: "1px solid rgb(11,116,229)",
                 background: "#fff",
                 color: `${products?.total === products?.data?.length
-                    ? "#ccc"
-                    : "rgb(11,116,229)"
+                  ? "#ccc"
+                  : "rgb(11,116,229)"
                   }`,
                 width: "40%",
                 height: "38px",

@@ -18,7 +18,6 @@ const AdminStore = () => {
     const [isModalOpenDelete, setIsModalOpenDelete] = useState(false)
     const [form] = Form.useForm()
     const [rowSelected, setRowSelected] = useState('')
-    const [typeSelect, setTypeSelect] = useState('')
     const [isOpenDrawer, setIsOpenDrawer] = useState(false)
     const user = useSelector((state) => state?.user)
     // const [searchText, setSearchText] = useState('');
@@ -233,7 +232,6 @@ const AdminStore = () => {
         return { ...Store, key: Store._id }
     })
     const { data, isSuccess, isError } = mutation
-    console.log('s', data)
     const { data: dataUpdate, isSuccess: isSuccessUpdate, isError: isErrorUpdate } = mutationUpdate
     const { data: dataDelete, isSuccess: isSuccessDelete, isError: isErrorDelete } = mutationDelete
     const { data: dataDeleteMany, isSuccess: isSuccessDeleteMany, isError: isErrorDeleteMany } = mutationDeleteMany

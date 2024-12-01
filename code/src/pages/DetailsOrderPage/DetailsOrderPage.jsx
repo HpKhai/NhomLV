@@ -154,7 +154,6 @@ const DetailsOrderPage = () => {
               </WrapperProduct>
             );
           })}
-
         </WrapperStyleContent>
       </div>
     </div>

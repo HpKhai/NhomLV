@@ -79,7 +79,6 @@ const MyOrderPage = () => {
       Message.error();
     }
   }, [isErrorCancle, isSuccessCancel]);
-
   const renderProduct = (data) => {
     return data?.map((order) => {
       return (
@@ -115,7 +114,6 @@ const MyOrderPage = () => {
       );
     });
   };
-  console.log(data);
   return (
     <WrapperContainer>
       <div style={{ height: "100%", width: "100%", margin: "0 auto" }}>

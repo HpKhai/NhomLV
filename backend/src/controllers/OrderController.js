@@ -9,7 +9,7 @@ const createOrder = async (req, res) => {
 
         if (!paymentMethod || !shippingMethod || !itemsPrice || !shippingPrice
             || !totalPrice || !fullName || !address || !city || !phone || !retailerName || !retailerId) {
-            return res.status(200).json({
+            return res.status(404).json({
                 status: 'ERR',
                 message: 'The input is required'
             })
@@ -17,7 +17,7 @@ const createOrder = async (req, res) => {
         const response = await OrderService.createOrder(req.body)
         return res.status(200).json(response)
     } catch (e) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: e
         })
     }
@@ -115,7 +115,6 @@ const cancelOrderDetails = async (req, res) => {
     try {
         const data = req.body.orderItems
         const orderId = req.body.orderId
-
         if (!orderId) {
             return res.status(200).json({
                 status: 'ERR',

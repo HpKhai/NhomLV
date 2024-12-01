@@ -118,8 +118,6 @@ const PaymentPage = () => {
             })
         }
     }
-    console.log('aaaaaaaaaaaaaaaaaaaaa', order?.orderItemsSelected[0]?.retailerName)
-    console.log('aaaaaaaaaaaaaaaaaaaaa', order?.orderItemsSelected[0]?.retailerId)
 
     const handleAddOrder = () => {
         if (payment && delivery) {

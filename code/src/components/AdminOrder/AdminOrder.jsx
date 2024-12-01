@@ -53,8 +53,8 @@ const AdminUser = () => {
   });
 
   const mutationDelete = useMutationHooks((data) => {
-    const { id, token } = data;
-    const res = UserService.deleteUser(id, token);
+    const { id, token, orderItems, userId } = data;
+    const res = OrderService.cancelOrder(id, token, orderItems, userId);
     return res;
   });
   const mutationDeleteMany = useMutationHooks((data) => {
@@ -250,7 +250,6 @@ const AdminUser = () => {
   const dataTable =
     orders?.data?.length &&
     orders?.data?.map((order) => {
-      console.log("order", order)
       return {
         ...order,
         fullName: order?.shippingAddress?.fullName,
@@ -406,10 +405,10 @@ const AdminUser = () => {
           data={dataTable}
           onRow={(record) => {
             return {
-              onClick: (event) => {
+              onClick: event => {
                 setRowSelected(record._id);
-              },
-            };
+              }
+            }
           }}
         />
       </div>

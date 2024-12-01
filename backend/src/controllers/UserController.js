@@ -8,7 +8,7 @@ const createUser = async (req, res) => {
     try {
         const { name, email, phone, password, confirmPassword, role } = req.body
         const regemail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        const regname = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]+$/
+        const regname = /(?=.*[A-Z])(?=.*[a-z])/
 
         const isCheckEmail = regemail.test(email)
         const isCheckName = regname.test(name)
@@ -27,7 +27,7 @@ const createUser = async (req, res) => {
         } else if (!isCheckName) {
             return res.status(400).json({
                 status: 'ERR',
-                message: 'Tài phải khoản chứa chữ hoa, số'
+                message: 'Tài phải khoản chứa chữ hoa, chữ thường'
             })
         } else if (password !== confirmPassword) {
             return res.status(400).json({

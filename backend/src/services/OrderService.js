@@ -6,9 +6,8 @@ const EmailService = require("../services/EmailService")
 
 const createOrder = (newOrder) => {
     return new Promise(async (resolve, reject) => {
-
         const { orderItems, paymentMethod, shippingMethod, itemsPrice, shippingPrice, totalPrice, isPaid, paidAt,
-            fullName, address, city, phone, user, email, retailerName, retailerId } = newOrder
+            fullName, address, city, phone, user, email, retailerName, retailerId } = newOrder;
         try {
             const promises = orderItems.map(async (order) => {
                 const productData = await Product.findOneAndUpdate(
@@ -23,47 +22,50 @@ const createOrder = (newOrder) => {
                         }
                     },
                     { new: true, returnDocument: 'after' }
-                )
-                if (productData) {
-                    const createdOrder = await Order.create({
-                        orderItems,
-                        shippingAddress: {
-                            fullName,
-                            address,
-                            city,
-                            phone
-                        },
-                        paymentMethod,
-                        shippingMethod,
-                        isPaid,
-                        paidAt,
-                        itemsPrice,
-                        shippingPrice,
-                        totalPrice,
-                        user: user,
-                        retailerName,
-                        retailerId
-                    })
-                    if (createdOrder) {
-                        await EmailService.sendEmailCreateOrder(email, orderItems)
-                        resolve({
-                            status: 'OK',
-                            message: 'success'
-                        })
-                    }
-                } else {
-                    return {
+                );
+                if (!productData) {
+                    throw {
                         status: 'ERR',
-                        message: 'Error',
+                        message: 'Không đủ hàng trong kho',
                         id: order.product
-                    }
+                    };
                 }
-            })
-        } catch (e) {
-            reject(e)
+            });
+
+            await Promise.all(promises);
+
+            const createdOrder = await Order.create({
+                orderItems,
+                shippingAddress: {
+                    fullName,
+                    address,
+                    city,
+                    phone
+                },
+                paymentMethod,
+                shippingMethod,
+                isPaid,
+                paidAt,
+                itemsPrice,
+                shippingPrice,
+                totalPrice,
+                user: user,
+                retailerName,
+                retailerId
+            });
+
+            await EmailService.sendEmailCreateOrder(email, orderItems);
+
+            resolve({
+                status: 'OK',
+                message: 'success'
+            });
+        } catch (error) {
+            reject(error);
         }
-    })
-}
+    });
+};
+
 
 const updateOrder = (id, data) => {
     return new Promise(async (resolve, reject) => {
@@ -200,20 +202,19 @@ const cancelOrderDetails = (id, data) => {
                 const productData = await Product.findOneAndUpdate(
                     {
                         _id: order.product,
-                        isPaid: false
+                        selled: { $gte: order.amount }
                     },
                     {
-                        isPaid: true
+                        $inc: {
+                            countInStock: +order.amount,
+                            selled: -order.amount
+                        }
                     },
-                    {
-                        new: true,
-                        returnDocument: 'after'
-                    }
+                    { new: true, returnDocument: 'after' }
                 )
 
-
                 if (productData) {
-                    order = await Order.findByIdAndUpdate(id)
+                    order = await Order.findByIdAndDelete(id)
                     if (order === null) {
                         resolve({
                             status: 'ERR',
@@ -248,6 +249,7 @@ const cancelOrderDetails = (id, data) => {
         }
     })
 }
+
 
 const getAllOrder = () => {
     return new Promise(async (resolve, reject) => {

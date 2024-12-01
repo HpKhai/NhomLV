@@ -1,7 +1,6 @@
 const cookieParser = require('cookie-parser')
 
-const Store = require("../models/StoreModel")
-const bcrypt = require("bcrypt")
+const Store = require('../models/StoreModel')
 
 const createStore = (newStore) => {
     return new Promise(async (resolve, reject) => {
@@ -124,6 +123,7 @@ const deleteManyStore = (ids) => {
 const getAllStore = (limit, page, sort, filter) => {
     return new Promise(async (resolve, reject) => {
         try {
+            
             const totalStore = await Store.countDocuments()
             if (filter) {
                 const label = filter[0];

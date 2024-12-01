@@ -65,6 +65,60 @@ const createOrder = (newOrder) => {
     })
 }
 
+const updateOrder = (id, data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const order = await Order.findById(id);
+            if (!order) {
+                return resolve({
+                    status: 'ERR',
+                    message: 'The order is not defined'
+                });
+            }
+
+            const productData = await Order.findOneAndUpdate(
+                {
+                    _id: order._id, // Điều kiện tìm sản phẩm theo ID
+                    isPaid: false      // Chỉ cập nhật nếu isPaid hiện tại là false
+                },
+                {
+                    isPaid: true       // Thay đổi isPaid thành true
+                },
+                {
+                    new: true,         // Trả về tài liệu sau khi cập nhật
+                    returnDocument: 'after'
+                }
+            );
+
+            if (!productData) {
+                return resolve({
+                    status: 'ERR',
+                    message: 'Product not found or already updated'
+                });
+            }
+
+            // Cập nhật thông tin đơn hàng
+            const updatedOrder = await Order.findByIdAndUpdate(
+                id,
+                data,
+                { new: true } // Trả về tài liệu sau khi cập nhật
+            );
+            resolve({
+                status: 'OK',
+                message: 'Update successful',
+                data: updatedOrder
+            });
+        } catch (e) {
+            reject({
+                status: 'ERR',
+                message: 'An error occurred during update',
+                error: e.message
+            });
+        }
+    });
+};
+
+
 const getOrderRetailer = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -129,6 +183,46 @@ const getDetailsOrder = (id) => {
                 status: 'OK',
                 message: ' SUCCESS',
                 data: order
+            })
+
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+const deleteOrder = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const checkOrder = await Order.findOne({
+                _id: id
+            })
+            if (checkOrder === null) {
+                resolve({
+                    status: 'OK',
+                    message: 'The order is not defined'
+                })
+            }
+            await Order.findByIdAndDelete(id)
+            resolve({
+                status: 'OK',
+                message: 'Delete order SUCCESS',
+
+            })
+
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+const deleteManyOrder = (ids) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await Order.deleteMany({ _id: ids })
+            resolve({
+                status: 'OK',
+                message: 'Delete order SUCCESS',
+
             })
 
         } catch (e) {
@@ -215,5 +309,8 @@ module.exports = {
     getDetailsOrder,
     cancelOrderDetails,
     getAllOrder,
-    getOrderRetailer
+    getOrderRetailer,
+    updateOrder,
+    deleteOrder,
+    deleteManyOrder
 }

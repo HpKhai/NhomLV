@@ -77,12 +77,12 @@ const createProduct = async (req, res) => {
                 message: 'The retailerId is required'
             })
         }
-        else if (!discount) {
-            return res.status(400).json({
-                status: 'ERR',
-                message: 'The discount is required'
-            })
-        }
+        // else if (!discount) {
+        //     return res.status(400).json({
+        //         status: 'ERR',
+        //         message: 'The discount is required'
+        //     })
+        // }
 
         const response = await ProductService.createProduct(req.body)
         return res.status(201).json(response)
@@ -195,7 +195,7 @@ const getAllProduct = async (req, res) => {
 const getAllProductRetailer = async (req, res) => {
     try {
         const { limit, page, sort, filter, userId } = req.query
-        console.log("bbbbbbbbbbbbbbbbbbbbbbbbb", req.query)
+        
         const response = await ProductService.getAllProductRetailer(
             Number(limit) || 8,
             Number(page) || 0,

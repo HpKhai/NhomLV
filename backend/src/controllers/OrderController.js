@@ -21,8 +21,32 @@ const createOrder = async (req, res) => {
             message: e
         })
     }
+}
+
+const updateOrder = async (req, res) => {
+    try {
+        const data = req.body.order
+        const orderId = req.body.data._id
+        // const id = req.body
+        // const data = req.body
+        if (!orderId) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'Sản phẩm không tồn tại'
+            })
+        }
+        const response = await OrderService.updateOrder(orderId, data)
+
+        return res.status(201).json(response)
+    } catch (e) {
+        return res.status(500).json({
+            message: e
+        })
+    }
 
 }
+
+
 const getOrderRetailer = async (req, res) => {
     try {
         const retailerId = req.params.id;
@@ -118,6 +142,44 @@ const getAllOrder = async (req, res) => {
     }
 }
 
+const deleteOrder = async (req, res) => {
+    try {
+        const orderId = req.params.id
+        if (!orderId) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'The orderId is required'
+            })
+        }
+
+        const response = await OrderService.deleteOrder(orderId)
+        return res.status(201).json(response)
+    } catch (e) {
+        return res.status(500).json({
+            message: e
+        })
+    }
+
+}
+const deleteManyOrder = async (req, res) => {
+    try {
+        const ids = req.body.ids
+        if (!ids) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'The orderId is required'
+            })
+        }
+
+        const response = await OrderService.deleteManyOrder(ids)
+        return res.status(201).json(response)
+    } catch (e) {
+        return res.status(500).json({
+            message: e
+        })
+    }
+
+}
 
 module.exports = {
     createOrder,
@@ -125,6 +187,8 @@ module.exports = {
     getDetailsOrder,
     cancelOrderDetails,
     getAllOrder,
-    getOrderRetailer
-
+    getOrderRetailer,
+    updateOrder,
+    deleteOrder,
+    deleteManyOrder,
 }

@@ -142,6 +142,44 @@ const getAllOrder = async (req, res) => {
     }
 }
 
+const deleteOrder = async (req, res) => {
+    try {
+        const orderId = req.params.id
+        if (!orderId) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'The orderId is required'
+            })
+        }
+
+        const response = await OrderService.deleteOrder(orderId)
+        return res.status(201).json(response)
+    } catch (e) {
+        return res.status(500).json({
+            message: e
+        })
+    }
+
+}
+const deleteManyOrder = async (req, res) => {
+    try {
+        const ids = req.body.ids
+        if (!ids) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'The orderId is required'
+            })
+        }
+
+        const response = await OrderService.deleteManyOrder(ids)
+        return res.status(201).json(response)
+    } catch (e) {
+        return res.status(500).json({
+            message: e
+        })
+    }
+
+}
 
 module.exports = {
     createOrder,
@@ -150,6 +188,7 @@ module.exports = {
     cancelOrderDetails,
     getAllOrder,
     getOrderRetailer,
-    updateOrder
-
+    updateOrder,
+    deleteOrder,
+    deleteManyOrder,
 }

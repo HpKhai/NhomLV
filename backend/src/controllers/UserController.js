@@ -27,7 +27,7 @@ const createUser = async (req, res) => {
         } else if (!isCheckName) {
             return res.status(400).json({
                 status: 'ERR',
-                message: 'Tài phải khoản chứa chữ hoa, số'
+                message: 'Tài khoản phải chứa chữ hoa, số'
             })
         } else if (password !== confirmPassword) {
             return res.status(400).json({
@@ -43,7 +43,8 @@ const createUser = async (req, res) => {
         const response = await UserService.createUser(req.body)
         return res.status(200).json(response)
     } catch (e) {
-        return res.status(404).json({
+        console.log(e)
+        return res.status(400).json({
             message: e
         })
     }

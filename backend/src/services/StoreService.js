@@ -123,7 +123,7 @@ const deleteManyStore = (ids) => {
 const getAllStore = (limit, page, sort, filter) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log("abbbbbbbbbbbbbbbbbbbbbbbb")
+            
             const totalStore = await Store.countDocuments()
             if (filter) {
                 const label = filter[0];
@@ -150,7 +150,6 @@ const getAllStore = (limit, page, sort, filter) => {
                     totalPage: Math.ceil(totalStore / limit)
                 });
             }
-            console.log('cccccccccccccccccccccccc')
             const allStore = await Store.find().limit(limit).skip(page * limit)
             resolve({
                 status: 'OK',

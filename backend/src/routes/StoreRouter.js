@@ -8,6 +8,7 @@ router.put('/update/:id', StoreController.updateStore)
 router.delete('/delete/:id', StoreController.deleteStore)
 router.get('/get-details/:id', StoreController.getDetailsStore)
 router.get('/get-all', StoreController.getAllStore)
+router.get('/get-all-retailer', StoreController.getAllRetailer)
 router.post('/deleteMany-product', StoreController.deleteManyStore)
 
 

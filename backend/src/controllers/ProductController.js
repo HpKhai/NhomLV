@@ -8,8 +8,6 @@ const createProduct = async (req, res) => {
         const { name, image, type, price, countInStock, rating, description, discount
             , origin, uses, report, preserve, retailerName, retailerId } = req.body
 
-        console.log('req.bodysssssssssssssssssssss', req.body)
-
         if (!name) {
             return res.status(400).json({
                 status: 'ERR',
@@ -156,7 +154,6 @@ const deleteProduct = async (req, res) => {
 
 }
 const deleteManyProduct = async (req, res) => {
-    console.log('req', req.body)
     try {
         const ids = req.body.ids
         if (!ids) {
@@ -195,7 +192,6 @@ const getAllProduct = async (req, res) => {
 const getAllProductRetailer = async (req, res) => {
     try {
         const { limit, page, sort, filter, userId } = req.query
-        console.log("bbbbbbbbbbbbbbbbbbbbbbbbb", req.query)
         const response = await ProductService.getAllProductRetailer(
             Number(limit) || 8,
             Number(page) || 0,

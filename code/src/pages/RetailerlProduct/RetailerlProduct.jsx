@@ -6,18 +6,14 @@ import {
   EditOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-// import TableComponent from "../TableComponent/TableComponent";
 import { Button, Form, Select, Space } from "antd";
 import InputComponents from "../../components/InputComponents/InputComponents";
-
 import { getBase64, renderOptions } from "../../utils";
 import * as ProductService from "../../service/ProductService";
 import { useMutationHooks } from "../../hooks/useMutationHooks";
 import { useQuery } from "@tanstack/react-query";
-// import DrawerComponent from "../DrawerComponent/DrawerComponent";
 import { useSelector } from "react-redux";
 import ModalComponent from "../../components/ModalComponent/ModalComponent";
-
 import * as Message from "../../components/Message/Message";
 import TableComponent from "../../components/TableComponent/TableComponent";
 import DrawerComponent from "../../components/DrawerComponent/DrawerComponent";

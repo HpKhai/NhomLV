@@ -30,8 +30,6 @@ const RetailerStore = () => {
   const [typeSelect, setTypeSelect] = useState("");
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const user = useSelector((state) => state?.user);
-  // const [searchText, setSearchText] = useState('');
-  // const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
   const inittial = () => ({
     name: "",
@@ -44,6 +42,7 @@ const RetailerStore = () => {
   const mutation = useMutationHooks((data) => {
     const res = StoreService.createStore({
       ...data,
+      retailerId: user?.id
     });
     return res;
   });
@@ -64,19 +63,18 @@ const RetailerStore = () => {
     return res;
   });
 
-  const getAllStores = async () => {
-    const res = await StoreService.getAllStore("", 100);
+  const getAllStoreRetailers = async () => {
+    const res = await StoreService.getAllStoreRetailer(user?.id, "", 100);
     return res;
   };
   const queryStore = useQuery({
     queryKey: ["Stores"],
-    queryFn: getAllStores,
+    queryFn: getAllStoreRetailers,
   });
   const { data: Stores } = queryStore;
 
   const fetchGetDetailsStore = async (rowSelected) => {
     const res = await StoreService.getDetailsStore(rowSelected);
-    console.log("res", res.data);
     if (res?.data) {
       setStateStoreDetails({
         name: res?.data?.name,

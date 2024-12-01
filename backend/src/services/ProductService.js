@@ -166,13 +166,10 @@ const getAllProduct = (limit, page, sort, filter) => {
 const getAllProductRetailer = (limit, page, sort, filter, userId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // Tổng số sản phẩm
             const totalProduct = await Product.countDocuments({ retailerId: userId });
 
-            // Tạo truy vấn tìm kiếm sản phẩm
-            let query = { retailerId: userId };  // Chỉ lấy sản phẩm của nhà bán hàng hiện tại
+            let query = { retailerId: userId }
 
-            // Thêm điều kiện lọc nếu có
             if (filter) {
                 const label = filter[0];
                 query[label] = { '$regex': filter[1], '$options': 'i' };  // Thêm tùy chọn 'i' cho regex (không phân biệt chữ hoa/thường)

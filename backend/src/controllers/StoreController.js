@@ -5,13 +5,19 @@ const StoreService = require('../services/StoreService');
 
 const createStore = async (req, res) => {
     try {
-        const { name, x, y } = req.body
+        const { name, x, y, retailerId } = req.body
         if (!name) {
             return res.status(400).json({
                 status: 'ERR',
                 message: 'The input name is required'
             })
-        } else if (!x) {
+        } else if (!retailerId) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'The input Y is required'
+            })
+        }
+        else if (!x) {
             return res.status(400).json({
                 status: 'ERR',
                 message: 'The input X is required'
@@ -73,7 +79,6 @@ const deleteStore = async (req, res) => {
 
 }
 const deleteManyStore = async (req, res) => {
-    console.log('req', req.body)
     try {
         const ids = req.body.ids
         if (!ids) {
@@ -101,6 +106,23 @@ const getAllStore = async (req, res) => {
             Number(page) || 0,
             sort,
             filter
+        )
+        return res.status(201).json(response)
+    } catch (e) {
+        return res.status(500).json({
+            message: e
+        })
+    }
+}
+const getAllRetailer = async (req, res) => {
+    try {
+        const { limit, page, sort, filter, userId } = req.query
+        const response = await StoreService.getAllRetailer(
+            Number(limit) || 8,
+            Number(page) || 0,
+            sort,
+            filter,
+            userId
         )
         return res.status(201).json(response)
     } catch (e) {
@@ -139,5 +161,6 @@ module.exports = {
     deleteStore,
     getAllStore,
     deleteManyStore,
-    getDetailsStore
+    getDetailsStore,
+    getAllRetailer
 };

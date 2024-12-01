@@ -8,4 +8,8 @@ const error = (mes = 'Error') => {
   message.error(mes);
 };
 
-export { success, error }
+const warning = (mes = 'Warning') => {
+  message.warning(mes);
+};
+
+export { success, error, warning }

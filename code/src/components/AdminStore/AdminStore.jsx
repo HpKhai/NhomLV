@@ -88,7 +88,6 @@ const AdminStore = () => {
 
     const fetchGetDetailsStore = async (rowSelected) => {
         const res = await StoreService.getDetailsStore(rowSelected)
-        console.log('res', res.data)
         if (res?.data) {
             setStateStoreDetails({
                 name: res?.data?.name,

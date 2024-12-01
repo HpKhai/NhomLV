@@ -18,13 +18,11 @@ export const getAllProductRetailer = async (userId, search, limit) => {
     if (!userId) {
         throw new Error("User ID is required");
     }
-
     if (search?.length > 0) {
         res = await axios.get(`${baseUrl}?userId=${userId}&filter=name&filter=${search}&limit=${limit}`);
     } else {
         res = await axios.get(`${baseUrl}?userId=${userId}&limit=${limit}`);
     }
-
     return res.data;
 };
 

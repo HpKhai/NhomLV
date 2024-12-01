@@ -11,6 +11,15 @@ export const getAllStore = async (search, limit) => {
     }
     return res.data
 }
+export const getAllStoreRetailer = async (userId, search, limit) => {
+    let res = {}
+    if (search?.length > 0) {
+        res = await axios.get(`${process.env.REACT_APP_API_URL}/store/get-all-retailer?userId=${userId}&filter=name&filter=${search}&limit=${limit}`)
+    } else {
+        res = await axios.get(`${process.env.REACT_APP_API_URL}/store/get-all-retailer?userId=${userId}&limit=${limit}`)
+    }
+    return res.data
+}
 
 export const getDetailsStore = async (id) => {
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/store/get-details/${id}`)

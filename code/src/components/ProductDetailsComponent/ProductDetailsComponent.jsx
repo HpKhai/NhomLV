@@ -41,18 +41,28 @@ const ProductDetailsComponent = ({ idProduct }) => {
 
   const handleChangeCount = (type) => {
     if (type === "increase") {
-      setNumProduct(numProduct + 1);
+      // Kiểm tra nếu số lượng hiện tại nhỏ hơn số lượng trong kho
+      if (numProduct < productDetails?.countInStock) {
+        setNumProduct(numProduct + 1);
+      } else {
+        Message.warning("Số lượng sản phẩm không được vượt quá số lượng trong kho!");
+      }
     } else {
-      setNumProduct(numProduct - 1);
+      // Đảm bảo số lượng không giảm xuống dưới 1
+      if (numProduct > 1) {
+        setNumProduct(numProduct - 1);
+      } else {
+        Message.warning("Số lượng sản phẩm phải ít nhất là 1!");
+      }
     }
   };
+
 
   const { data: productDetails } = useQuery({
     queryKey: ["product-details", idProduct],
     queryFn: () => fetchGetDetailsProduct(idProduct),
     enabled: !!idProduct,
   });
-  console.log('productDetails', productDetails)
   const handleAddOrderProduct = () => {
     if (!user?.id) {
       navigate("/sign-in", { state: location?.pathname });

@@ -80,14 +80,15 @@ const updateOrder = (id, data) => {
 
             const productData = await Order.findOneAndUpdate(
                 {
-                    _id: order._id, // Điều kiện tìm sản phẩm theo ID
-                    isPaid: false      // Chỉ cập nhật nếu isPaid hiện tại là false
+                    _id: order._id,
+                    isPaid: false
                 },
                 {
-                    isPaid: true       // Thay đổi isPaid thành true
+                    isPaid: true,
+                    isDelivered: true
                 },
                 {
-                    new: true,         // Trả về tài liệu sau khi cập nhật
+                    new: true,
                     returnDocument: 'after'
                 }
             );

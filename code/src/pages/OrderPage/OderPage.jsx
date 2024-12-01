@@ -3,7 +3,7 @@ import { WrapperCountOrder, WrapperInputNumber, WrapperInfo, WrapperItemOrder, W
 import { PlusOutlined, DeleteOutlined, MinusOutlined } from '@ant-design/icons'
 import { Checkbox, Form, message } from "antd"
 import { useDispatch, useSelector } from "react-redux"
-import { decreaseAmount, increaseAmount, removeAllOrder, removeOrder, selectedOrder } from "../../redux/slides/orderSlide"
+import { decreaseAmount, increaseAmount, updateAmount, removeAllOrder, removeOrder, selectedOrder } from "../../redux/slides/orderSlide"
 import { convertPrice } from "../../utils"
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent"
 import ModalComponent from "../../components/ModalComponent/ModalComponent"
@@ -13,6 +13,7 @@ import * as UserService from "../../service/UserService"
 import { updateUser } from "../../redux/slides/userSlide"
 import { useNavigate } from "react-router"
 import StepsComponent from "../../components/StepsComponent/StepsComponent"
+import * as Message from "../../components/Message/Message";
 
 
 
@@ -41,6 +42,11 @@ const OrderPage = () => {
     }
 
 
+    const onChangeAmount = (idProduct, value) => {
+        if (value > 0) {
+            dispatch(updateAmount({ idProduct, value }));
+        }
+    };
     useEffect(() => {
         dispatch(selectedOrder({ listCheck }))
     }, [listCheck])
@@ -60,7 +66,6 @@ const OrderPage = () => {
 
         }
     }, [isModalUpdateInfo])
-    console.log('us', user)
     const priceMemo = useMemo(() => {
         const result = order?.orderItemsSelected?.reduce((total, cur) => {
             return total + ((cur.price) * cur.amount)
@@ -241,8 +246,11 @@ const OrderPage = () => {
                                                     onClick={() => handleChangeCount('decrease', order?.product, order?.amount === 1)}>
                                                     <MinusOutlined style={{ color: '#000', fontSize: '10px' }} />
                                                 </button>
-                                                <WrapperInputNumber onChange={onChange} defaultValue={order?.amount}
-                                                    value={order?.amount} size='small' min={1} max={order?.countInStock} />
+                                                <WrapperInputNumber onChange={(value) => onChangeAmount(order?.product, value)}
+                                                    value={order?.amount}
+                                                    size="small"
+                                                    min={1}
+                                                    max={order?.countInStock} />
                                                 <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
                                                     onClick={() => handleChangeCount('increase', order?.product, order?.amount === order?.countInStock)}>
                                                     <PlusOutlined style={{ color: '#000', fontSize: '10px' }} />

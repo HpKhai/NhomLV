@@ -11,7 +11,6 @@ const CardComponent = (props) => {
     const handleGetDetailsProduct = (id) => {
         navigate(`/product-details/${id}`)
     }
-    console.log(retailerName)
     return (
         <WrapperCardStyle
             hoverable
